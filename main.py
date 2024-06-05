@@ -1,7 +1,8 @@
-import urllib.request
-import urllib.error
 import time
+import urllib.error
+import urllib.request
 from typing import Optional
+
 from url_test_result import URLTestResult
 
 
