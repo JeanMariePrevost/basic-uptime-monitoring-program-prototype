@@ -1,4 +1,4 @@
-from main import check_url_through_urllib
+from src.monitoring import check_url_through_urllib
 
 
 def test_check_url_success():

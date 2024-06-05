@@ -2,6 +2,10 @@ from typing import Optional
 
 
 class URLTestResult:
+    """
+    Return object of a monitoring query which will contain all relevant information for a given query
+    """
+
     def __init__(
         self,
         url: str,
@@ -17,11 +21,7 @@ class URLTestResult:
         self.error: Optional[str] = error
 
     def __repr__(self) -> str:
-        return (
-            f"URLTestResult(url={self.url}, exists={self.exists}, "
-            f"status_code={self.status_code}, latency={self.latency}, "
-            f"error={self.error})"
-        )
+        return f"URLTestResult(url={self.url}, exists={self.exists}, " f"status_code={self.status_code}, latency={self.latency}, " f"error={self.error})"
 
     def print_results(self) -> None:
         print("#################################")
