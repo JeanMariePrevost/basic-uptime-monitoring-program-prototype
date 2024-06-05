@@ -5,6 +5,8 @@ THis module uses pystray to create a system tray icon and allow the program to k
 import PIL.Image
 import pystray
 
+import util
+
 
 # Define actions for the RMB menu of the tray icon
 def on_clicked_exit(icon, item):
@@ -17,8 +19,9 @@ def on_clicked_exit(icon, item):
 # Define actions for the RMB menu of the tray icon
 def on_clicked_open_gui(icon, item):
     print(f'Clicked "{item}"')
-    print("TODO - Implement showing the GUI here")
-    raise NotImplementedError("The GUI or Show GUI function is not yet implemented.")
+    # TODO - Implement showing the GUI here
+    util.show_error_message("Not implemented", "No default action since the GUI is not yet implemented.")
+    raise NotImplementedError("No default action since the GUI is not yet implemented.")
 
 
 def initialize_system_tray() -> None:
