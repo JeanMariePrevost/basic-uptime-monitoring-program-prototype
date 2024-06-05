@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99e456e7-c32a-4532-80cd-a3182c2d2607" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_url_test_result.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/INF1430_Prototype.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/INF1430_Prototype.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/system_tray.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitoring.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_monitoring.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/url_test_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/url_test_result.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
