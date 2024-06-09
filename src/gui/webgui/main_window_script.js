@@ -1,50 +1,95 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-  document.querySelector("#dashboard > h1").innerText = "The script is working";
+  document.getElementById("add-card-btn").addEventListener("click", addNewCard);
 });
 
+/**
+ * Add a new monitor card to the dashboard
+ */
 function addNewCard() {
   const cardContainer = document.getElementById("dashboard");
-  const newCard = document.createElement("div");
-  newCard.className = "card";
-  newCard.innerHTML = `
-        <h2>New Resource</h2>
-        <p>Details about the new resource.</p>
-        <button class="edit-btn">Edit</button>
-        <button class="delete-btn">Delete</button>
-    `;
+  const newCard = createCardElement();
+
   cardContainer.appendChild(newCard);
   showOrHideNoMonitorsCard();
 
-  newCard.querySelector(".delete-btn").addEventListener("click", function () {
-    const card = this.parentNode;
-    // HACK - Fix the delete animation by setting the height of the card to be "static
-    //Get the current computed height of the card
-    const cardHeight = window.getComputedStyle(card).getPropertyValue("height");
-    // Set the height of the card to its current computed height
-    card.style.height = cardHeight;
-    // Force a reflow (redraw) to make sure the new height is applied
-    void card.offsetHeight;
-    // Add the fade-out class to start the animation
-    card.classList.add("fade-out");
-    //When done animating, remove
-    card.addEventListener("animationend", () => {
-      card.remove();
-      showOrHideNoMonitorsCard();
-    });
+  addDeleteButtonListener(newCard);
+  addEditButtonListener(newCard);
+}
+
+/**
+ * Creates  a new html element for a card monitor
+ * @returns {HTMLDivElement} A new card element for a monitor
+ */
+function createCardElement() {
+  const newCard = document.createElement("div");
+  newCard.className = "card";
+  newCard.innerHTML = `
+      <h2>New Monitor</h2>
+      <p>Details about the monitor.</p>
+      <button class="edit-btn">Edit</button>
+      <button class="delete-btn">Delete</button>
+    `;
+  return newCard;
+}
+
+/**
+ * Add a listener to the delete button of the card
+ * @param {HTMLDivElement} card - The card element
+ */
+function addDeleteButtonListener(card) {
+  card.querySelector(".delete-btn").addEventListener("click", function () {
+    animateAndRemoveCard(this.parentNode);
   });
 }
 
-function showOrHideNoMonitorsCard() {
-  const cardContainer = document.getElementById('dashboard');
-  const noMonitorsCard = document.getElementById('no-monitors-card');
-  const otherCards = cardContainer.getElementsByClassName('card');
+/**
+ * Add a listener to the edit button of the card
+ * @param {HTMLDivElement} card - The card element
+ */
+function addEditButtonListener(card) {
+  card.querySelector(".edit-btn").addEventListener("click", function () {
+    const card = this.parentNode;
+    const cardTitle = card.querySelector("h2");
+    const cardDetails = card.querySelector("p");
+    const cardEditButton = card.querySelector(".edit-btn");
 
-  if (otherCards.length === 0) {
-    noMonitorsCard.style.display = 'block';
-  } else if (otherCards.length > 0 && noMonitorsCard) {
-    noMonitorsCard.style.display = 'none';
-  }
+    const newTitle = prompt("Enter the new title", cardTitle.textContent);
+    const newDetails = prompt("Enter the new details", cardDetails.textContent);
+
+    if (newTitle && newDetails) {
+      cardTitle.textContent = newTitle;
+      cardDetails.textContent = newDetails;
+    }
+  });
 }
 
-// Attach the event listener to the button
-document.getElementById("add-card-btn").addEventListener("click", addNewCard);
+/**
+ * Animate the removal of a card then remove it from the dashboard
+ * @param {HTMLDivElement} card - The card element to remove
+ */
+function animateAndRemoveCard(card) {
+  const cardHeight = window.getComputedStyle(card).getPropertyValue("height");
+  card.style.height = cardHeight;
+  void card.offsetHeight;
+  card.classList.add("fade-out");
+
+  card.addEventListener("animationend", () => {
+    card.remove();
+    showOrHideNoMonitorsCard();
+  });
+}
+
+/**
+ * Show or hide the no monitors card based on whether monitors exist
+ */
+function showOrHideNoMonitorsCard() {
+  const cardContainer = document.getElementById("dashboard");
+  const noMonitorsCard = document.getElementById("no-monitors-card");
+  const otherCards = cardContainer.getElementsByClassName("card");
+
+  if (otherCards.length === 0) {
+    noMonitorsCard.style.display = "block";
+  } else if (noMonitorsCard) {
+    noMonitorsCard.style.display = "none";
+  }
+}
