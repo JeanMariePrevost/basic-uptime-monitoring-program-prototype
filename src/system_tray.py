@@ -39,4 +39,4 @@ def initialize_system_tray() -> None:
     )
 
     # Run pystray
-    icon.run()
+    icon.run_detached()

@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99e456e7-c32a-4532-80cd-a3182c2d2607" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/util.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/system_tray.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/system_tray.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,6 +37,9 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2hQyeuHlv2q5lBrVfJRnCgHjEpy" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -48,13 +51,18 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "F:/OneDrive/MyDocs/Study/TELUQ/Session 5 - Hiver 2024/INF1430 Final Project/Python Projects/INF1430_Prototype",
+    "last_opened_file_path": "F:/OneDrive/MyDocs/Study/TELUQ/Session 5 - Hiver 2024/INF1430 Final Project/Python Projects/INF1430_Prototype/src/gui/html",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
+    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\OneDrive\MyDocs\Study\TELUQ\Session 5 - Hiver 2024\INF1430 Final Project\Python Projects\INF1430_Prototype\src\gui\html" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\OneDrive\MyDocs\Study\TELUQ\Session 5 - Hiver 2024\INF1430 Final Project\Python Projects\INF1430_Prototype\src\gui\html" />
+      <recent name="F:\OneDrive\MyDocs\Study\TELUQ\Session 5 - Hiver 2024\INF1430 Final Project\Python Projects\INF1430_Prototype\src\gui\css" />
       <recent name="F:\OneDrive\MyDocs\Study\TELUQ\Session 5 - Hiver 2024\INF1430 Final Project\Python Projects\INF1430_Prototype" />
       <recent name="F:\OneDrive\MyDocs\Study\TELUQ\Session 5 - Hiver 2024\INF1430 Final Project\Python Projects\INF1430_Prototype\src" />
     </key>

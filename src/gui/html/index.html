@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello PyWebView</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="welcome-message"></h1>
+    <input type="text" id="input-message" placeholder="Enter your message">
+    <button onclick="sendMessage()">Set Welcome Message</button>
+    <button onclick="executeAction()">Click Me</button>
+
+    <script>
+        function sendMessage() {
+            const message = document.getElementById('input-message').value;
+            window.pywebview.api.set_welcome_message(message).then(response => {
+                document.getElementById('welcome-message').innerText = response;
+            });
+        }
+
+        function executeAction() {
+            window.pywebview.api.execute_action();
+        }
+    </script>
+</body>
+</html>
