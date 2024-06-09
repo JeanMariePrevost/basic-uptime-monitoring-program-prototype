@@ -1,0 +1,161 @@
+/* Reset some basic styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  min-width: max-content; /* Fix the bg width when the window is narrow */
+}
+
+/* Navigation bar */
+nav {
+  align-items: center; /* Vertically center */
+  background-color: #333;
+  color: white;
+  padding: 10px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+#nav-title-label {
+  font-size: xx-large;
+  color: #4caf50;
+  margin: 0 20px;
+  display: inline;
+}
+
+/* Top navigation bar "buttons" */
+nav a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+  padding: 15px 20px;
+  border-top: black 5px;
+}
+
+nav a:hover {
+  background-color: #555;
+}
+
+nav a:active {
+  background-color: #444;
+}
+
+/* Content section */
+#dashboard {
+  padding: 20px;
+  max-width: 800px;
+  width: 50%;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#dashboard h1 {
+  text-align: center;
+}
+
+#no-monitors-card {
+  text-align: center;
+  color: #888;
+  background-color: white;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.2s ease-out; /* Animate cards loading or being created */
+}
+
+#add-card-btn {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  align-self: center;
+  font-size: 1.2em;
+  margin: 6px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#add-card-btn:hover {
+  background-color: #56ca5a;
+}
+
+#add-card-btn:active {
+  background-color: #4caf50;
+}
+
+/* Style the cards */
+.card {
+  background-color: white;
+  padding: 20px;
+  margin: 10px 0; /* Spacing between cards */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.2s ease-out; /* Animate cards loading or being created */
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-2em);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.card p {
+  margin: 10px 0 0;
+}
+
+
+.card button {
+  background-color: #9b9b9b;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  align-self: center;
+  font-size: 0.9em;
+  margin: 0.5em 1em 0 0;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.card button:hover {
+  background-color: #b4b4b4;
+}
+
+.card button:active {
+  background-color: #8f8f8f;
+}
+
+
+@keyframes deletion-fadeOut {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    height:0;
+  }
+}
+
+.fade-out {
+  animation: deletion-fadeOut 0.1s ease-out;
+}
