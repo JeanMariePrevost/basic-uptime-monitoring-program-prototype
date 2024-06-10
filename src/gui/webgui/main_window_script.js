@@ -24,8 +24,9 @@ function createCardElement() {
   const newCard = document.createElement("div");
   newCard.className = "card";
   newCard.innerHTML = `
-      <h2>New Monitor</h2>
-      <p>Details about the monitor.</p>
+      <div class="monitor-title">Monitore Title</div>
+      <div class="monitor-url"><a href="https://google.com">https://google.com</a></div>
+      <div class="monitor-status">Status unknown</div>
       <button class="edit-btn">Edit</button>
       <button class="delete-btn">Delete</button>
     `;
@@ -92,4 +93,30 @@ function showOrHideNoMonitorsCard() {
   } else if (noMonitorsCard) {
     noMonitorsCard.style.display = "none";
   }
+}
+
+
+/**
+ * Save the content of all monitor cards to a local JSON file
+ */
+async function saveMonitorCardsToFile() {
+  // Get all the monitor cards
+  const cards = document.querySelectorAll('.card');
+
+  // Extract the content of each card
+  const cardContents = Array.from(cards).map(card => card.textContent);
+
+  // Convert the contents to JSON
+  const json = JSON.stringify(cardContents, null, 2);
+
+  // Use the File System API to write the JSON to a file
+  // Note: This API is not available in all environments
+  // In a Node.js environment, you would use the fs module
+  // In a browser environment, you might use the File System Access API
+  // This example assumes a Node.js environment
+  const fs = require('fs');
+  fs.writeFile('monitorCards.json', json, (err) => {
+    if (err) throw err;
+    console.log('The file has been saved!');
+  });
 }

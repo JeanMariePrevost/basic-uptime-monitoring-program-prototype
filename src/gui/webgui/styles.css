@@ -113,8 +113,20 @@ nav a:active {
   font-size: 1.5em;
 }
 
-.card p {
-  margin: 10px 0 0;
+.card .monitor-title {
+  font-size: 1.1em;
+  color:#333;
+  font-weight: bold;
+  margin: 0.6em 0 0.2em 0;
+}
+
+.card .monitor-url {
+  color:#555;
+}
+
+.card .monitor-status {
+  color:orange;
+  font-weight: bold;
 }
 
 
