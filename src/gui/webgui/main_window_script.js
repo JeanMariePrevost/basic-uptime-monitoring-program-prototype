@@ -138,7 +138,6 @@ function showOrHideNoMonitorsCard() {
 
 function receiveDataFromBackendTest(data) {
   console.log(data);
-  document.querySelector("h1").textContent = data;
   // Parse the JSON string into a JavaScript object
   const monitors = JSON.parse(data);
 
@@ -150,9 +149,4 @@ function receiveDataFromBackendTest(data) {
     newMonitorCard = createCardElement(monitor.title, monitor.url, monitor.status);
     addCardToDashboard(newMonitorCard);
   });
-
-  // Manipulate the data as needed
-  // For example, you could display the data in the HTML
-  const h1 = document.querySelector("h1");
-  h1.textContent = `Received ${monitors.length} monitors`;
 }
