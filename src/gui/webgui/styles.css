@@ -67,6 +67,31 @@ nav a:active {
   animation: fadeIn 0.2s ease-out; /* Animate cards loading or being created */
 }
 
+#action-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+#apply-btn {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  align-self: center;
+  font-size: 1.2em;
+  margin: 6px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#apply-btn:hover {
+  background-color: #56ca5a;
+}
+
+#apply-btn:active {
+  background-color: #4caf50;
+}
+
 #add-card-btn {
   background-color: #4caf50;
   border: none;
@@ -86,6 +111,7 @@ nav a:active {
 #add-card-btn:active {
   background-color: #4caf50;
 }
+
 
 /* Style the cards */
 .card {
@@ -127,6 +153,14 @@ nav a:active {
 .card .monitor-status {
   color:orange;
   font-weight: bold;
+}
+
+.card .monitor-status[status="up"] {
+  color:green;
+}
+
+.card .monitor-status[status="down"] {
+  color:red;
 }
 
 

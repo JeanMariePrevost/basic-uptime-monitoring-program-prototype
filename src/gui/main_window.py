@@ -7,35 +7,31 @@ class Api:
     def __init__(self):
         self.message = "Welcome!"
 
-    def set_welcome_message(self, message):
-        self.message = message
-        return self.message
-
-    def execute_action(self):
-        print("You clicked the button")
-        self.set_welcome_message("You clicked the button")
-        return "Action executed"
+    def sendMonitorsDataToBackend(self, monitorDataJson) -> None:
+        """
+        This function is called from the frontend when the user clicks the "Send data to backend" button
+        :param value:
+        :return:
+        """
+        print("The frontend sent this to the backend:")
+        print(monitorDataJson)
 
 
 def start():
     print("main_window GUI starting...")
     api = Api()
-    window = webview.create_window("Hello PyWebView", "gui/webgui/main_window.html", text_select=True, js_api=api)
+    window = webview.create_window("Hello PyWebView", "gui/webgui/main_window.html", text_select=True, js_api=api, width=1000, height=800)
 
     def on_loaded():
-        print("On loaded ran")
         dummy_monitor_data = [
             {"title": "Monitor 1", "url": "http://example1.com", "status": "up"},
             {"title": "Monitor 2", "url": "http://example2.com", "status": "down"},
             {"title": "Monitor 3", "url": "http://example3.com", "status": "unknown"},
         ]
-        # window.evaluate_js('document.querySelector("h1").textContent = "ye"')
         dummy_data_as_json = json.dumps(dummy_monitor_data)
-        print(dummy_data_as_json)
-        # Escape the JSON string properly
+        # Escape the JSON string properly otherwise it will break the JS
         dummy_data_as_json = dummy_data_as_json.replace('"', '\\"')
-        print(dummy_monitor_data.__repr__())  # Seems it by default represents itself as a JSON string in string form
+        # Send the data to the gui
         window.evaluate_js(f'receiveDataFromBackendTest("{dummy_data_as_json}")')
 
-    webview.start(on_loaded, debug=True)  # Debug enables the inspector
-    print("gui start() finished")
+    webview.start(on_loaded, debug=True)  # debug=True opens the inspector

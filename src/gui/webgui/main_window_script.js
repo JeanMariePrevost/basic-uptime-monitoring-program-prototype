@@ -1,29 +1,50 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   document.getElementById("add-card-btn").addEventListener("click", addNewEmptyCardToDashboard);
+  document.getElementById("apply-btn").addEventListener("click", sendMonitorsDataToBackend);
 });
 
 /**
  * Add a new monitor card to the dashboard
  */
 function addNewEmptyCardToDashboard() {
-  const cardContainer = document.getElementById("dashboard");
-  const newCard = createCardElement();
-
-  cardContainer.appendChild(newCard);
-  showOrHideNoMonitorsCard();
-
-  addDeleteButtonListener(newCard);
-  addEditButtonListener(newCard);
+  addCardToDashboard(createCardElement());
 }
 
+/**
+ * Sends the data from all monitor cards on the dashboard to the backend
+ */
+function sendMonitorsDataToBackend() {
+  const monitorData = serializeMonitorsData();
+  pywebview.api.sendMonitorsDataToBackend(monitorData);
+}
+
+/**
+ * Serializes the data from all monitor cards on the dashboard to JSON
+ */
+function serializeMonitorsData() {
+  const cardContainer = document.getElementById("cards-container");
+  const cards = cardContainer.getElementsByClassName("card");
+
+  const monitors = [];
+  for (let card of cards) {
+    const title = card.querySelector(".monitor-title").textContent;
+    const url = card.querySelector(".monitor-url").textContent;
+    const status = card.querySelector(".monitor-status").textContent;
+    monitors.push({ title, url, status });
+  }
+
+  return JSON.stringify(monitors);
+}
 
 /**
  * Adds a card existing card element to the dashboard
  * @param {HTMLDivElement} card - The card element to add
  */
 function addCardToDashboard(card) {
-  const cardContainer = document.getElementById("dashboard");
+  const cardContainer = document.getElementById("cards-container");
   cardContainer.appendChild(card);
+  addDeleteButtonListener(card);
+  addEditButtonListener(card);
   showOrHideNoMonitorsCard();
 }
 
@@ -40,7 +61,7 @@ function createCardElement(title, url, status) {
   newCard.innerHTML = `
       <div class="monitor-title">${title}</div>
       <a class="monitor-url" href="${url}" target="_blank">${url}</a>
-      <div class="monitor-status">${status}</div>
+      <div class="monitor-status" status="${status}">${status}</div>
       <button class="edit-btn">Edit</button>
       <button class="delete-btn">Delete</button>
     `;
@@ -104,7 +125,7 @@ function animateAndRemoveCard(card) {
  * Show or hide the no monitors card based on whether monitors exist
  */
 function showOrHideNoMonitorsCard() {
-  const cardContainer = document.getElementById("dashboard");
+  const cardContainer = document.getElementById("cards-container");
   const noMonitorsCard = document.getElementById("no-monitors-card");
   const otherCards = cardContainer.getElementsByClassName("card");
 

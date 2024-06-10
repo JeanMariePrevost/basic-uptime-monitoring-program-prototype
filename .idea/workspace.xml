@@ -7,7 +7,10 @@
     <list default="true" id="99e456e7-c32a-4532-80cd-a3182c2d2607" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gui/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/main_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/webgui/main_window.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/webgui/main_window.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gui/webgui/main_window_script.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/webgui/main_window_script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/webgui/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/webgui/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/system_tray.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/system_tray.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

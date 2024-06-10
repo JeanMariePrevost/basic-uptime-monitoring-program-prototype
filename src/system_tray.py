@@ -14,6 +14,7 @@ def on_clicked_exit(icon, item):
     print("Going to stop pystray now...")
     print("Going to exit now...")
     icon.stop()
+    # TODO - Implement a single exit function somewhere, exiting everything (e.g. closing all GUI windows, stopping pystray...)
 
 
 # Define actions for the RMB menu of the tray icon
