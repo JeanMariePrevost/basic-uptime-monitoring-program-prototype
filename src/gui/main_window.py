@@ -1,3 +1,5 @@
+import json
+
 import webview
 
 
@@ -18,11 +20,22 @@ class Api:
 def start():
     print("main_window GUI starting...")
     api = Api()
-    window = webview.create_window("Hello PyWebView", "gui/html/index.html", js_api=api)
+    window = webview.create_window("Hello PyWebView", "gui/webgui/main_window.html", text_select=True, js_api=api)
 
     def on_loaded():
         print("On loaded ran")
-        window.evaluate_js(f'document.getElementById("welcome-message").innerText = "{api.message}"')
+        dummy_monitor_data = [
+            {"title": "Monitor 1", "url": "http://example1.com", "status": "up"},
+            {"title": "Monitor 2", "url": "http://example2.com", "status": "down"},
+            {"title": "Monitor 3", "url": "http://example3.com", "status": "unknown"},
+        ]
+        # window.evaluate_js('document.querySelector("h1").textContent = "ye"')
+        dummy_data_as_json = json.dumps(dummy_monitor_data)
+        print(dummy_data_as_json)
+        # Escape the JSON string properly
+        dummy_data_as_json = dummy_data_as_json.replace('"', '\\"')
+        print(dummy_monitor_data.__repr__())  # Seems it by default represents itself as a JSON string in string form
+        window.evaluate_js(f'receiveDataFromBackendTest("{dummy_data_as_json}")')
 
-    webview.start(on_loaded)
+    webview.start(on_loaded, debug=True)  # Debug enables the inspector
     print("gui start() finished")

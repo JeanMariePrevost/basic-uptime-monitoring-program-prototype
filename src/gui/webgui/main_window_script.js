@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-  document.getElementById("add-card-btn").addEventListener("click", addNewCard);
+  document.getElementById("add-card-btn").addEventListener("click", addNewEmptyCardToDashboard);
 });
 
 /**
  * Add a new monitor card to the dashboard
  */
-function addNewCard() {
+function addNewEmptyCardToDashboard() {
   const cardContainer = document.getElementById("dashboard");
   const newCard = createCardElement();
 
@@ -16,17 +16,31 @@ function addNewCard() {
   addEditButtonListener(newCard);
 }
 
+
 /**
- * Creates  a new html element for a card monitor
+ * Adds a card existing card element to the dashboard
+ * @param {HTMLDivElement} card - The card element to add
+ */
+function addCardToDashboard(card) {
+  const cardContainer = document.getElementById("dashboard");
+  cardContainer.appendChild(card);
+  showOrHideNoMonitorsCard();
+}
+
+/**
+ * Creates a new html element for a card monitor
+ * @param {string} title - The title of the monitor
+ * @param {string} url - The URL of the monitor
+ * @param {string} status - The status of the monitor
  * @returns {HTMLDivElement} A new card element for a monitor
  */
-function createCardElement() {
+function createCardElement(title, url, status) {
   const newCard = document.createElement("div");
   newCard.className = "card";
   newCard.innerHTML = `
-      <div class="monitor-title">Monitore Title</div>
-      <div class="monitor-url"><a href="https://google.com">https://google.com</a></div>
-      <div class="monitor-status">Status unknown</div>
+      <div class="monitor-title">${title}</div>
+      <a class="monitor-url" href="${url}" target="_blank">${url}</a>
+      <div class="monitor-status">${status}</div>
       <button class="edit-btn">Edit</button>
       <button class="delete-btn">Delete</button>
     `;
@@ -49,17 +63,23 @@ function addDeleteButtonListener(card) {
  */
 function addEditButtonListener(card) {
   card.querySelector(".edit-btn").addEventListener("click", function () {
+    // Get the card's current data
     const card = this.parentNode;
-    const cardTitle = card.querySelector("h2");
-    const cardDetails = card.querySelector("p");
-    const cardEditButton = card.querySelector(".edit-btn");
+    const cardTitle = card.querySelector(".monitor-title");
+    const cardURL = card.querySelector(".monitor-url");
+    const cardStatus = card.querySelector(".monitor-status");
 
+    //Basic prompt to edit the card
     const newTitle = prompt("Enter the new title", cardTitle.textContent);
-    const newDetails = prompt("Enter the new details", cardDetails.textContent);
+    const newURL = prompt("Enter the new details", cardURL.textContent);
+    const newStatus = prompt("DEBUG - Enter a status", cardStatus.textContent);
 
-    if (newTitle && newDetails) {
+    // Update the card with the new data
+    if (newTitle && newURL && newStatus) {
       cardTitle.textContent = newTitle;
-      cardDetails.textContent = newDetails;
+      cardURL.href = newURL;
+      cardURL.textContent = newURL;
+      cardStatus.textContent = newStatus;
     }
   });
 }
@@ -95,28 +115,23 @@ function showOrHideNoMonitorsCard() {
   }
 }
 
+function receiveDataFromBackendTest(data) {
+  console.log(data);
+  document.querySelector("h1").textContent = data;
+  // Parse the JSON string into a JavaScript object
+  const monitors = JSON.parse(data);
 
-/**
- * Save the content of all monitor cards to a local JSON file
- */
-async function saveMonitorCardsToFile() {
-  // Get all the monitor cards
-  const cards = document.querySelectorAll('.card');
-
-  // Extract the content of each card
-  const cardContents = Array.from(cards).map(card => card.textContent);
-
-  // Convert the contents to JSON
-  const json = JSON.stringify(cardContents, null, 2);
-
-  // Use the File System API to write the JSON to a file
-  // Note: This API is not available in all environments
-  // In a Node.js environment, you would use the fs module
-  // In a browser environment, you might use the File System Access API
-  // This example assumes a Node.js environment
-  const fs = require('fs');
-  fs.writeFile('monitorCards.json', json, (err) => {
-    if (err) throw err;
-    console.log('The file has been saved!');
+  // Log each monitor's properties
+  monitors.forEach((monitor) => {
+    console.log(`Title: ${monitor.title}`);
+    console.log(`URL: ${monitor.url}`);
+    console.log(`Status: ${monitor.status}`);
+    newMonitorCard = createCardElement(monitor.title, monitor.url, monitor.status);
+    addCardToDashboard(newMonitorCard);
   });
+
+  // Manipulate the data as needed
+  // For example, you could display the data in the HTML
+  const h1 = document.querySelector("h1");
+  h1.textContent = `Received ${monitors.length} monitors`;
 }
