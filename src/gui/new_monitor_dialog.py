@@ -37,7 +37,7 @@ def run_dialog(callback_with_results: callable) -> str:
     # Set up pywebview
     api = Api()
     global _window
-    _window = webview.create_window("Create New Monitor", "gui/webgui/new_monitor_dialog.html", text_select=True, js_api=api, width=700, height=390)
+    _window = webview.create_window("Create New Monitor", "gui/webgui/new_monitor_dialog.html", text_select=True, js_api=api, width=700, height=390, on_top=True, focus=True)
 
     def on_loaded():
         pass

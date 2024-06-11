@@ -1,13 +1,34 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-  document.getElementById("add-card-btn").addEventListener("click", addNewEmptyCardToDashboard);
+  document.getElementById("add-card-btn").addEventListener("click", onAddMonitorClicked);
   document.getElementById("apply-btn").addEventListener("click", sendMonitorsDataToBackend);
 });
 
 /**
+ * Disables all interaction with the window and blurs it
+ */
+function disableWindow() {
+  const body = document.querySelector("body");
+  body.style.pointerEvents = "none";
+  body.style.filter = "blur(5px)";
+  body.style.userSelect = "none";
+}
+
+/**
+ * Re-enables interactions with the window and removes the blur
+ */
+function enableWindow() {
+  console.log("Enabling window");
+  const body = document.querySelector("body");
+  body.style.pointerEvents = "auto";
+  body.style.filter = "none";
+  body.style.userSelect = "auto";
+}
+
+/**
  * Add a new monitor card to the dashboard
  */
-function addNewEmptyCardToDashboard() {
-  addCardToDashboard(createCardElement());
+function onAddMonitorClicked() {
+  pywebview.api.on_new_monitor_button_clicked();
 }
 
 /**
