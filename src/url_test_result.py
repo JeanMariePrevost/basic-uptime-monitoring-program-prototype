@@ -6,19 +6,13 @@ class URLTestResult:
     Return object of a monitoring query which will contain all relevant information for a given query
     """
 
-    def __init__(
-        self,
-        url: str,
-        exists: bool,
-        status_code: Optional[int],
-        latency: Optional[float],
-        error: Optional[str],
-    ):
+    def __init__(self, url: str, exists: bool, status_code: Optional[int], latency: Optional[float], error: Optional[str], timestamp: Optional[str] = None):
         self.url: str = url
         self.exists: bool = exists
         self.status_code: Optional[int] = status_code
         self.latency: Optional[float] = latency
         self.error: Optional[str] = error
+        self.timestamp: Optional[str] = timestamp
 
     def __repr__(self) -> str:
         return f"URLTestResult(url={self.url}, exists={self.exists}, " f"status_code={self.status_code}, latency={self.latency}, " f"error={self.error})"

@@ -48,25 +48,34 @@ function addCardToDashboard(card) {
   showOrHideNoMonitorsCard();
 }
 
+
 /**
  * Creates a new html element for a card monitor
  * @param {string} title - The title of the monitor
  * @param {string} url - The URL of the monitor
- * @param {string} status - The status of the monitor
+ * @param {string} last_result_status - The last result status of the monitor
+ * @param {string} last_result_timestamp - The last result timestamp of the monitor
+ * @param {string} next_test_timestamp - The next test timestamp of the monitor
+ * @param {string} test_interval_in_seconds - The test interval in seconds of the monitor
  * @returns {HTMLDivElement} A new card element for a monitor
  */
-function createCardElement(title, url, status) {
+function createCardElement(title, url, last_result_status, last_result_timestamp, next_test_timestamp, test_interval_in_seconds) {
   const newCard = document.createElement("div");
   newCard.className = "card";
   newCard.innerHTML = `
       <div class="monitor-title">${title}</div>
       <a class="monitor-url" href="${url}" target="_blank">${url}</a>
-      <div class="monitor-status" status="${status}">${status}</div>
+      <div class="monitor-status" status="${last_result_status}">${last_result_status}</div>
+      <div class="monitor-last-result-timestamp">${last_result_timestamp}</div>
+      <div class="monitor-next-test-timestamp">${next_test_timestamp}</div>
+      <div class="monitor-test-interval">${test_interval_in_seconds}</div>
       <button class="edit-btn">Edit</button>
       <button class="delete-btn">Delete</button>
     `;
   return newCard;
 }
+
+
 
 /**
  * Add a listener to the delete button of the card

@@ -2,6 +2,8 @@ import json
 
 import webview
 
+import monitoring_manager
+
 
 class Api:
     def __init__(self):
@@ -9,19 +11,20 @@ class Api:
 
     def sendMonitorsDataToBackend(self, monitorDataJson) -> None:
         """
-        This function is called from the frontend when the user clicks the "Send data to backend" button
+        This function is called from the frontend when the user clicks the "Apply" button
+        It updates the info in the backend
         :param monitorDataJson: The JSON string containing the monitors data
         """
         print("The frontend sent this to the backend:")
         print(monitorDataJson)
-        save_monitors_json_to_file(monitorDataJson)
+        monitoring_manager.update_monitors_from_json(monitorDataJson)
 
 
 def start():
     print("main_window GUI starting...")
 
     print("Loading monitor data from file...")
-    monitor_data_json = load_monitors_json_from_file()
+    monitor_data_json = monitoring_manager.get_monitor_list_json()
     if monitor_data_json is None or monitor_data_json == "" or monitor_data_json == "[]":
         print("No monitor data found in file. Creating dummy data for testing...")
         dummy_monitor_data = [
@@ -46,17 +49,3 @@ def start():
 
     # Start the webview, showing the window
     webview.start(on_loaded, debug=True)  # debug=True opens the inspector
-
-
-def save_monitors_json_to_file(monitor_data_json: str) -> None:
-    with open("monitors_data.json", "w") as file:
-        file.write(monitor_data_json)
-    print("Saved the monitors data to monitors_data.json.")
-
-
-def load_monitors_json_from_file() -> str:
-    try:
-        with open("monitors_data.json", "r") as file:
-            return file.read()
-    except FileNotFoundError:
-        return "[]"
