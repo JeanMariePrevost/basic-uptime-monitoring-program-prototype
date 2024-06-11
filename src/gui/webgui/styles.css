@@ -45,7 +45,7 @@ nav a:active {
 #dashboard {
   padding: 20px;
   max-width: 800px;
-  width: 50%;
+  width: 60%;
   margin: 20px auto;
   display: flex;
   flex-direction: column;
@@ -134,9 +134,23 @@ nav a:active {
   }
 }
 
-.card h2 {
-  margin: 0;
-  font-size: 1.5em;
+.monitor-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.monitor-info .left-aligned {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.monitor-info .right-aligned {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  text-align: right;
 }
 
 .card .monitor-title {
@@ -153,6 +167,8 @@ nav a:active {
 .card .monitor-status {
   color:orange;
   font-weight: bold;
+  font-size:  1.1em;
+  margin-bottom: 0.2em;
 }
 
 .card .monitor-status[status="up"] {
@@ -189,7 +205,7 @@ nav a:active {
   0% {
     opacity: 1;
   }
-  1% {
+  20% {
     opacity: 0;
   }
   100% {
@@ -203,5 +219,5 @@ nav a:active {
 }
 
 .fade-out {
-  animation: deletion-fadeOut 0.1s ease-out;
+  animation: deletion-fadeOut 0.2s ease-out;
 }

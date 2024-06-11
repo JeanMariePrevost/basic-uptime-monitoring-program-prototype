@@ -15,10 +15,10 @@ class MonitorObject:
     next_test_timestamp: str  # The monitor will run its test if the current time is greater than this
     test_interval_in_seconds: int  # The interval to be added to the next_test_datetime after each test
 
-    def __init__(self, title: str, url: str, test_interval_in_seconds: int, last_result: str | None = None, last_result_timestamp: str | None = None, next_test_timestamp: str | None = None):
+    def __init__(self, title: str, url: str, test_interval_in_seconds: int, last_result_status: str | None = None, last_result_timestamp: str | None = None, next_test_timestamp: str | None = None):
         self.title = title
         self.url = url
-        self.last_result = last_result
+        self.last_result_status = last_result_status
         self.last_result_timestamp = last_result_timestamp
         self.next_test_timestamp = next_test_timestamp
         self.test_interval_in_seconds = test_interval_in_seconds
@@ -26,7 +26,7 @@ class MonitorObject:
             self.next_test_timestamp = datetime.datetime.now().isoformat()
 
     def __repr__(self):
-        return f"MonitorObject(title={self.title}, url={self.url}, last_result={self.last_result}, last_result_timestamp={self.last_result_timestamp}, next_test_timestamp={self.next_test_timestamp}, test_interval_in_seconds={self.test_interval_in_seconds})"
+        return f"MonitorObject(title={self.title}, url={self.url}, last_result_status={self.last_result_status}, last_result_timestamp={self.last_result_timestamp}, next_test_timestamp={self.next_test_timestamp}, test_interval_in_seconds={self.test_interval_in_seconds})"
 
     def execute_test_if_due(self) -> None:
         """

@@ -63,17 +63,26 @@ function createCardElement(title, url, last_result_status, last_result_timestamp
   const newCard = document.createElement("div");
   newCard.className = "card";
   newCard.innerHTML = `
-      <div class="monitor-title">${title}</div>
-      <a class="monitor-url" href="${url}" target="_blank">${url}</a>
-      <div class="monitor-status" status="${last_result_status}">${last_result_status}</div>
-      <div class="monitor-last-result-timestamp">${last_result_timestamp}</div>
-      <div class="monitor-next-test-timestamp">${next_test_timestamp}</div>
-      <div class="monitor-test-interval">${test_interval_in_seconds}</div>
-      <button class="edit-btn">Edit</button>
-      <button class="delete-btn">Delete</button>
+      <div class="monitor-info">
+        <div class="left-aligned">
+          <div class="monitor-title">${title}</div>
+          <a class="monitor-url" href="${url}" target="_blank">${url}</a>
+        </div>
+        <div class="right-aligned">
+          <div class="monitor-status" status="${last_result_status}">${last_result_status}</div>
+          <div class="monitor-last-result-timestamp">${last_result_timestamp}</div>
+          <div class="monitor-next-test-timestamp">${next_test_timestamp}</div>
+          <div class="monitor-test-interval">${test_interval_in_seconds}</div>
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+      </div>
     `;
   return newCard;
 }
+
 
 
 
@@ -83,7 +92,8 @@ function createCardElement(title, url, last_result_status, last_result_timestamp
  */
 function addDeleteButtonListener(card) {
   card.querySelector(".delete-btn").addEventListener("click", function () {
-    animateAndRemoveCard(this.parentNode);
+    let parentCard = this.closest('.card');// Get the relevant card element
+    animateAndRemoveCard(parentCard);
   });
 }
 
@@ -123,8 +133,10 @@ function animateAndRemoveCard(card) {
   card.style.height = cardHeight;
   void card.offsetHeight;
   card.classList.add("fade-out");
+  console.log("Card removal animation started");
 
   card.addEventListener("animationend", () => {
+    console.log("Card removal animation ended");
     card.remove();
     showOrHideNoMonitorsCard();
   });
@@ -145,17 +157,24 @@ function showOrHideNoMonitorsCard() {
   }
 }
 
-function receiveDataFromBackendTest(data) {
-  console.log(data);
-  // Parse the JSON string into a JavaScript object
-  const monitors = JSON.parse(data);
 
-  // Log each monitor's properties
-  monitors.forEach((monitor) => {
-    console.log(`Title: ${monitor.title}`);
-    console.log(`URL: ${monitor.url}`);
-    console.log(`Status: ${monitor.status}`);
-    newMonitorCard = createCardElement(monitor.title, monitor.url, monitor.status);
+/**
+ * Hook for receiving monitor data from the backend
+ * @param {string} jsonMonitorsData - The JSON string of monitor data 
+ */
+function receiveMonitorsDataFromBackend(jsonMonitorsData) {
+  console.log("Received monitor data from backend:");
+  console.log(jsonMonitorsData);
+  const monitorsData = JSON.parse(jsonMonitorsData);
+  for (let monitor of monitorsData) {
+    console.log(`title: ${monitor.title}`);
+    console.log(`url: ${monitor.url}`);
+    console.log(`last_result_status: ${monitor.last_result_status}`);
+    console.log(`last_result_timestamp: ${monitor.last_result_timestamp}`);
+    console.log(`next_test_timestamp: ${monitor.next_test_timestamp}`);
+    console.log(`test_interval_in_seconds: ${monitor.test_interval_in_seconds}`);
+
+    newMonitorCard = createCardElement(monitor.title, monitor.url, monitor.last_result_status, monitor.last_result_timestamp, monitor.next_test_timestamp, monitor.test_interval_in_seconds)
     addCardToDashboard(newMonitorCard);
-  });
+  }
 }

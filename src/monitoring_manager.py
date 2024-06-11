@@ -8,42 +8,38 @@ from typing import List
 
 from monitor_object import MonitorObject
 
-_monitors: List[MonitorObject] | None = None
-
-
-def get_monitor_list() -> List[MonitorObject]:
-    global _monitors
-    if _monitors is None:
-        _monitors = load_monitors_list_from_file()
-    return _monitors
-
 
 def get_monitor_list_json() -> str:
-    return convert_monitors_list_to_json(get_monitor_list())
+    return convert_monitors_list_to_json(_monitors)
 
 
 def save_monitors_to_file() -> None:
     with open("monitors_data.json", "w") as file:
-        json_data = convert_monitors_list_to_json(monitors)
+        json_data = convert_monitors_list_to_json(_monitors)
         file.write(json_data)
 
 
-def load_monitors_list_from_file() -> List[MonitorObject]:
-    try:
-        with open("monitors_data.json", "r") as file:
-            return convert_monitors_json_to_list(file.read())
-    except FileNotFoundError:
-        print("No monitor data file found. Returning empty list.")
-        return []
+def update_monitors_list_from_loca_json_file() -> None:
+    global _monitors
+    _monitors = read_monitors_list_from_file()
+
+
+def read_monitors_json_from_file() -> str:
+    with open("monitors_data.json", "r") as file:
+        return file.read()
+
+
+def read_monitors_list_from_file() -> List[MonitorObject]:
+    return convert_monitors_json_to_list(read_monitors_json_from_file())
 
 
 def add_monitor(monitor: MonitorObject) -> None:
-    monitors.append(monitor)
+    _monitors.append(monitor)
     save_monitors_to_file()
 
 
 def remove_monitor(monitor: MonitorObject) -> None:
-    monitors.remove(monitor)
+    _monitors.remove(monitor)
     save_monitors_to_file()
 
 
@@ -51,8 +47,8 @@ def update_monitors_from_json(monitor_data_json: str) -> None:
     """
     Rebuilds the monitors list with the data from the JSON string
     """
-    global monitors
-    monitors = convert_monitors_json_to_list(monitor_data_json)
+    global _monitors
+    _monitors = convert_monitors_json_to_list(monitor_data_json)
     save_monitors_to_file()
 
 
@@ -64,3 +60,6 @@ def convert_monitors_json_to_list(monitor_data_json: str) -> List[MonitorObject]
 def convert_monitors_list_to_json(monitor_data_list: List[MonitorObject]) -> str:
     monitor_dicts = [monitor.__dict__ for monitor in monitor_data_list]
     return json.dumps(monitor_dicts)
+
+
+_monitors: List[MonitorObject] = read_monitors_list_from_file()
