@@ -1,6 +1,7 @@
 import webview
 
 import monitoring_manager
+from util import escape_json_for_javascript
 
 
 class Api:
@@ -37,6 +38,3 @@ def start():
     webview.start(on_loaded, debug=True)  # debug=True opens the inspector
 
 
-def escape_json_for_javascript(json_string: str):
-    monitor_data_json = json_string.replace('"', '\\"')
-    return monitor_data_json

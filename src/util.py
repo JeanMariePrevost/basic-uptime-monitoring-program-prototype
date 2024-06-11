@@ -59,3 +59,11 @@ def ask_retry_cancel(title, message):
     response = messagebox.askretrycancel(title, message)
     root.destroy()  # This closes the Tkinter instance
     return response
+
+
+def escape_json_for_javascript(json_string: str):
+    """
+    Prepares a JSON string to be sent through pywebview's api without errors
+    """
+    monitor_data_json = json_string.replace('"', '\\"')
+    return monitor_data_json
