@@ -54,6 +54,9 @@ def update_monitors_from_json(monitor_data_json: str) -> None:
 
 def convert_monitors_json_to_list(monitor_data_json: str) -> List[MonitorObject]:
     monitor_dicts = json.loads(monitor_data_json)
+    # Convert test_interval_in_seconds to integer
+    for monitor in monitor_dicts:
+        monitor["test_interval_in_seconds"] = int(monitor["test_interval_in_seconds"])
     return [MonitorObject(**monitor_dict) for monitor_dict in monitor_dicts]
 
 

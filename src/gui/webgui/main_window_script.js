@@ -15,7 +15,7 @@ function addNewEmptyCardToDashboard() {
  */
 function sendMonitorsDataToBackend() {
   const monitorData = serializeMonitorsData();
-  pywebview.api.sendMonitorsDataToBackend(monitorData);
+  pywebview.api.send_monitors_data_to_backend(monitorData);
 }
 
 /**
@@ -29,8 +29,11 @@ function serializeMonitorsData() {
   for (let card of cards) {
     const title = card.querySelector(".monitor-title").textContent;
     const url = card.querySelector(".monitor-url").textContent;
-    const status = card.querySelector(".monitor-status").textContent;
-    monitors.push({ title, url, status });
+    const last_result_status = card.querySelector(".monitor-status").textContent;
+    const last_result_timestamp = card.querySelector(".monitor-last-result-timestamp").textContent;
+    const next_test_timestamp = card.querySelector(".monitor-next-test-timestamp").textContent;
+    const test_interval_in_seconds = parseInt(card.querySelector(".monitor-test-interval").textContent);
+    monitors.push({ title, url, last_result_status, last_result_timestamp, next_test_timestamp, test_interval_in_seconds });
   }
 
   return JSON.stringify(monitors);

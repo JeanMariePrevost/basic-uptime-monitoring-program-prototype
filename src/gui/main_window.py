@@ -7,7 +7,7 @@ class Api:
     def __init__(self):
         self.message = "Welcome!"
 
-    def sendMonitorsDataToBackend(self, monitorDataJson) -> None:
+    def send_monitors_data_to_backend(self, monitorDataJson) -> None:
         """
         This function is called from the frontend when the user clicks the "Apply" button
         It updates the info in the backend
