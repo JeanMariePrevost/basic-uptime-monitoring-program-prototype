@@ -30,6 +30,10 @@ class Api:
         print(f"New monitor dialog closed with user input: {user_input}")
         _window.evaluate_js("enableWindow()")
 
+        if user_input is not None:
+            monitoring_manager.create_and_append_monitor(user_input["title"], user_input["url"], user_input["test_interval_in_seconds"])
+            _window.evaluate_js(f'receiveMonitorsDataFromBackend("{escape_json_for_javascript(monitoring_manager.get_monitor_list_json())}")')
+
 
 _window: webview.Window
 

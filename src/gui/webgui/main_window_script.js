@@ -190,6 +190,14 @@ function receiveMonitorsDataFromBackend(jsonMonitorsData) {
   console.log("Received monitor data from backend:");
   console.log(jsonMonitorsData);
   const monitorsData = JSON.parse(jsonMonitorsData);
+
+  //Rough method: Clear each existing card element then rebuild the entire list every time
+  const cardContainer = document.getElementById("cards-container");
+  while (cardContainer.firstChild) {
+    cardContainer.firstChild.remove();
+  }
+  
+
   for (let monitor of monitorsData) {
     console.log(`title: ${monitor.title}`);
     console.log(`url: ${monitor.url}`);
@@ -202,3 +210,5 @@ function receiveMonitorsDataFromBackend(jsonMonitorsData) {
     addCardToDashboard(newMonitorCard);
   }
 }
+
+

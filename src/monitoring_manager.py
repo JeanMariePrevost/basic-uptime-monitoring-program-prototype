@@ -33,9 +33,14 @@ def read_monitors_list_from_file() -> List[MonitorObject]:
     return convert_monitors_json_to_list(read_monitors_json_from_file())
 
 
-def add_monitor(monitor: MonitorObject) -> None:
+def append_monitor(monitor: MonitorObject) -> None:
     _monitors.append(monitor)
     save_monitors_to_file()
+
+
+def create_and_append_monitor(title: str, url: str, test_interval_in_seconds: int) -> MonitorObject:
+    new_monitor = MonitorObject(title, url, test_interval_in_seconds)
+    append_monitor(new_monitor)
 
 
 def remove_monitor(monitor: MonitorObject) -> None:

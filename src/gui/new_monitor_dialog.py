@@ -23,6 +23,7 @@ class Api:
         print(submitted_data["title"])
         print(submitted_data["url"])
         print(submitted_data["test_interval_in_seconds"])
+
         _callback_function(submitted_data)
         _window.destroy()
 
@@ -37,10 +38,10 @@ def run_dialog(callback_with_results: callable) -> str:
     # Set up pywebview
     api = Api()
     global _window
-    _window = webview.create_window("Create New Monitor", "gui/webgui/new_monitor_dialog.html", text_select=True, js_api=api, width=700, height=390, on_top=True, focus=True)
+    _window = webview.create_window("Create New Monitor", "gui/webgui/new_monitor_dialog.html", text_select=True, js_api=api, width=700, height=390, on_top=True)
 
     def on_loaded():
         pass
 
     # Start the webview, showing the window
-    webview.start(on_loaded, debug=True)  # debug=True opens the inspector
+    webview.start(on_loaded)  # debug=True opens the inspector

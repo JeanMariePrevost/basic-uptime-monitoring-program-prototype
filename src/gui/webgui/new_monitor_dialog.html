@@ -6,9 +6,11 @@
     <title>Create New Monitor</title>
     <link rel="stylesheet" href="styles.css" />
     <script>
-      //   document.addEventListener("DOMContentLoaded", function () {
-      //     document.querySelector("form").addEventListener("submit", submitDialog);
-      //   });
+      document.addEventListener("DOMContentLoaded", function () {
+        //     document.querySelector("form").addEventListener("submit", submitDialog);
+        //focus on the title input field
+        document.getElementById("title").focus();
+      });
       function submitDialog() {
         event.preventDefault(); // Prevent the default form submission, I want the validation but not the regular submit behavior
         const title = document.getElementById("title").value;
