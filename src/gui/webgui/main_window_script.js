@@ -174,6 +174,8 @@ function showOrHideNoMonitorsCard() {
   const noMonitorsCard = document.getElementById("no-monitors-card");
   const otherCards = cardContainer.getElementsByClassName("card");
 
+  console.log(`Number of cards: ${otherCards.length}`)
+
   if (otherCards.length === 0) {
     noMonitorsCard.style.display = "block";
   } else if (noMonitorsCard) {
@@ -191,11 +193,16 @@ function receiveMonitorsDataFromBackend(jsonMonitorsData) {
   console.log(jsonMonitorsData);
   const monitorsData = JSON.parse(jsonMonitorsData);
 
-  //Rough method: Clear each existing card element then rebuild the entire list every time
+  //Rough refresh method: Remove all cards from cards-container, EXCLUDING the no-monitors-card element
   const cardContainer = document.getElementById("cards-container");
-  while (cardContainer.firstChild) {
-    cardContainer.firstChild.remove();
+  const cards = cardContainer.getElementsByClassName("card");
+  for (let i = cards.length - 1; i >= 0; i--) {
+    const card = cards[i];
+    if (card.id !== "no-monitors-card") {
+      card.remove();
+    }
   }
+
   
 
   for (let monitor of monitorsData) {

@@ -7,11 +7,7 @@
     <list default="true" id="99e456e7-c32a-4532-80cd-a3182c2d2607" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/monitors_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/monitors_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/main_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/new_monitor_dialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/new_monitor_dialog.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gui/webgui/main_window_script.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/webgui/main_window_script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/webgui/new_monitor_dialog.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/webgui/new_monitor_dialog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/monitoring_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitoring_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,18 +41,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "transition-to-real-data-backend",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "F:/OneDrive/MyDocs/Study/TELUQ/Session 5 - Hiver 2024/INF1430 Final Project/Python Projects/INF1430_Prototype/src/monitoring_manager.py",
-    "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;transition-to-real-data-backend&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/OneDrive/MyDocs/Study/TELUQ/Session 5 - Hiver 2024/INF1430 Final Project/Python Projects/INF1430_Prototype/src/monitoring_manager.py&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\OneDrive\MyDocs\Study\TELUQ\Session 5 - Hiver 2024\INF1430 Final Project\Python Projects\INF1430_Prototype\src\gui\html" />
