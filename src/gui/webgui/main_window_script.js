@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   document.getElementById("add-card-btn").addEventListener("click", onAddMonitorClicked);
-  document.getElementById("apply-btn").addEventListener("click", sendMonitorsDataToBackend);
+  document.getElementById("apply-btn").addEventListener("click", updateMonitorsDataInBackend);
 });
 
 /**
@@ -34,7 +34,7 @@ function onAddMonitorClicked() {
 /**
  * Sends the data from all monitor cards on the dashboard to the backend
  */
-function sendMonitorsDataToBackend() {
+function updateMonitorsDataInBackend() {
   const monitorData = serializeMonitorsData();
   pywebview.api.send_monitors_data_to_backend(monitorData);
 }
@@ -117,7 +117,11 @@ function createCardElement(title, url, last_result_status, last_result_timestamp
 function addDeleteButtonListener(card) {
   card.querySelector(".delete-btn").addEventListener("click", function () {
     let parentCard = this.closest('.card');// Get the relevant card element
-    animateAndRemoveCard(parentCard);
+    let cardTitle = parentCard.querySelector('.monitor-title').textContent;
+    const confirmed = confirm(`Are you sure you want to delete the following monitor?\n"${cardTitle}"\n\nThis action cannot be undone.`);
+    if (confirmed) {
+      animateAndRemoveCard(parentCard);
+    }
   });
 }
 
@@ -162,6 +166,7 @@ function animateAndRemoveCard(card) {
   card.addEventListener("animationend", () => {
     console.log("Card removal animation ended");
     card.remove();
+    updateMonitorsDataInBackend();//Apply the changes to the backend immediately
     showOrHideNoMonitorsCard();
   });
 }
