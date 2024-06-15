@@ -71,7 +71,8 @@ def start(_sender=None):
     monitoring_manager.tests_executed_signal.connect(monitors_tests_ran)
 
     # Start the webview, showing the window
-    webview.start(on_loaded)  # debug=True opens the inspector
+    # webview.start(on_loaded)
+    webview.start(on_loaded, debug=True)  # debug=True opens the inspector
 
     # Once the window is closed
     monitoring_manager.tests_executed_signal.disconnect(monitors_tests_ran)
