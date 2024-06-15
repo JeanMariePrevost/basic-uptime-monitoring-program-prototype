@@ -1,14 +1,14 @@
-import time
-
-import gui
 import monitoring_manager
+import queue_manager
 import system_tray
-from gui import main_window, new_monitor_dialog
-from monitor_object import MonitorObject
+from gui import main_window
 
 if __name__ == "__main__":
-    # system_tray.initialize_system_tray()
+    system_tray.initialize_system_tray()
     monitoring_manager.read_monitors_list_from_file()
     print("Debug - automatic monitoring starting...")
-    monitoring_manager.start_monitoring()
-    main_window.start()
+    # monitoring_manager.start_monitoring()
+
+    queue_manager.enqueue_task(main_window.start)
+
+    queue_manager.main_loop()

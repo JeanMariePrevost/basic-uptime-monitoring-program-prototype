@@ -42,7 +42,7 @@ class Api:
         sendMonitorsDataToFrontend()
 
 
-_window: webview.Window
+_window: webview.Window | None = None
 
 
 def sendMonitorsDataToFrontend():
@@ -56,7 +56,7 @@ def monitors_tests_ran(_sender) -> None:
     sendMonitorsDataToFrontend()
 
 
-def start():
+def start(_sender=None):
     print("main_window GUI starting...")
 
     # Set up pywebview
@@ -71,4 +71,12 @@ def start():
     monitoring_manager.tests_executed_signal.connect(monitors_tests_ran)
 
     # Start the webview, showing the window
-    webview.start(on_loaded, debug=True)  # debug=True opens the inspector
+    webview.start(on_loaded)  # debug=True opens the inspector
+
+    # Once the window is closed
+    monitoring_manager.tests_executed_signal.disconnect(monitors_tests_ran)
+    _window = None
+
+
+def is_open():
+    return _window is not None
