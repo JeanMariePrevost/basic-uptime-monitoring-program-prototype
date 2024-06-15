@@ -7,7 +7,7 @@ if __name__ == "__main__":
     system_tray.initialize_system_tray()
     monitoring_manager.read_monitors_list_from_file()
     print("Debug - automatic monitoring starting...")
-    # monitoring_manager.start_monitoring()
+    monitoring_manager.start_monitoring()
 
     queue_manager.enqueue_task(main_window.start)
 

@@ -14,6 +14,7 @@ def main_loop():
     The main loop of the program.
     This function is called from the main thread and runs in a loop, checking for tasks to execute.
     """
+    print("Main loop starting...")
     while True:
         try:
             task = _main_thread_queue.get_nowait()
@@ -21,6 +22,7 @@ def main_loop():
         except queue.Empty:
             pass
         time.sleep(0.1)
+        print("DEBUG - Main loop running...")
 
 
 def enqueue_task(task):

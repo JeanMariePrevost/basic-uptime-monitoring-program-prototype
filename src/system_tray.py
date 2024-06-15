@@ -15,7 +15,8 @@ def on_clicked_exit(icon, item):
     print("Going to stop pystray now...")
     print("Going to exit now...")
     icon.stop()
-    exit(0)
+    main_window.close()
+    queue_manager.enqueue_task(lambda: exit(0))
     # TODO - Implement a single exit function somewhere, exiting everything (e.g. closing all GUI windows, stopping pystray...)
 
 

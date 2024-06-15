@@ -80,3 +80,10 @@ def start(_sender=None):
 
 def is_open():
     return _window is not None
+
+
+def close():
+    global _window
+    if _window is not None:
+        _window.destroy()
+        _window = None
