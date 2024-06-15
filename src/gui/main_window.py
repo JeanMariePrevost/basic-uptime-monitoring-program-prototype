@@ -32,10 +32,23 @@ class Api:
 
         if user_input is not None:
             monitoring_manager.create_and_append_monitor(user_input["title"], user_input["url"], user_input["test_interval_in_seconds"])
-            _window.evaluate_js(f'receiveMonitorsDataFromBackend("{escape_json_for_javascript(monitoring_manager.get_monitor_list_json())}")')
+            sendMonitorsDataToFrontend()
+
+    def on_check_status_button_clicked(self, monitorTitle: str) -> None:
+        print("Check status button clicked")
+        print(monitorTitle)
+        monitor = monitoring_manager.get_monitor_by_title(monitorTitle)
+        monitor.execute_test()  # Currently synchronous, so really a bad idea, but simple for the prototype
+        sendMonitorsDataToFrontend()
 
 
 _window: webview.Window
+
+
+def sendMonitorsDataToFrontend():
+    monitor_data_json = escape_json_for_javascript(monitoring_manager.get_monitor_list_json())
+    print(f"Sending this to the frontend: {monitor_data_json}")
+    _window.evaluate_js(f'receiveMonitorsDataFromBackend("{monitor_data_json}")')
 
 
 def start():
@@ -48,11 +61,7 @@ def start():
 
     # Create a function that will be called when the window is loaded
     def on_loaded():
-        # Send the data to the gui
-        monitor_data_json = escape_json_for_javascript(monitoring_manager.get_monitor_list_json())
-        print("Going to send:")
-        print(monitor_data_json)
-        _window.evaluate_js(f'receiveMonitorsDataFromBackend("{monitor_data_json}")')
+        sendMonitorsDataToFrontend()
 
     # Start the webview, showing the window
     webview.start(on_loaded, debug=True)  # debug=True opens the inspector

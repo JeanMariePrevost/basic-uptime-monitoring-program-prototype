@@ -20,6 +20,14 @@ def save_monitors_to_file() -> None:
         print("Saved monitors to file")
 
 
+def get_monitor_by_title(title: str) -> MonitorObject:
+    # HACK - We're using the monitor's title as its "unique" id in the prototype, terrible idea but eh
+    for monitor in _monitors:
+        if monitor.title == title:
+            return monitor
+    return None
+
+
 def update_monitors_list_from_loca_json_file() -> None:
     global _monitors
     _monitors = read_monitors_list_from_file()

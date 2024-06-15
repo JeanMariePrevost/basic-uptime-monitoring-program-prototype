@@ -50,6 +50,7 @@ function addCardToDashboard(card) {
   cardContainer.appendChild(card);
   addDeleteButtonListener(card);
   addEditButtonListener(card);
+  addCheckStatusButtonListener(card);
   showOrHideNoMonitorsCard();
 }
 
@@ -100,6 +101,7 @@ function createCardElement(monitorDataObject) {
       <div class="buttons">
         <button class="edit-btn">Edit</button>
         <button class="delete-btn">Delete</button>
+        <button class="check-status-btn">Check Status</button>
       </div>
     `;
   return newCard;
@@ -152,6 +154,17 @@ function addEditButtonListener(card) {
     testInterval.textContent = newTestInterval;
 
     updateMonitorsDataInBackend();
+  });
+}
+
+/**
+ * Add a listener to the check status button of the card
+ * @param {HTMLDivElement} card - The card element
+ */
+function addCheckStatusButtonListener(card) {
+  card.querySelector(".check-status-btn").addEventListener("click", function () {
+    const title = card.querySelector(".monitor-title").textContent;
+    pywebview.api.on_check_status_button_clicked(title);
   });
 }
 
