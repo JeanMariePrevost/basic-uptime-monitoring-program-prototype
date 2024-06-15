@@ -70,12 +70,12 @@ function createCardElement(monitorDataObject) {
   let display_last_result_status = monitorDataObject.last_result_status;
   let display_last_result_error = monitorDataObject.last_result_error;
   let display_last_result_timestamp = monitorDataObject.last_result_timestamp;
-  if (typeof display_last_result_timestamp === 'string') {
-    display_last_result_timestamp = monitorDataObject.last_result_timestamp.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).*/, "$1 $2");
+  if (typeof display_last_result_timestamp === "string") {
+    display_last_result_timestamp = formatTimestampForDisplay(display_last_result_timestamp)
   }
   let display_next_test_timestamp = monitorDataObject.next_test_timestamp;
-  if (typeof display_next_test_timestamp === 'string') {
-    display_next_test_timestamp = monitorDataObject.next_test_timestamp.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).*/, "$1 $2");
+  if (typeof display_next_test_timestamp === "string") {
+    display_next_test_timestamp = formatTimestampForDisplay(display_next_test_timestamp)
   }
   let display_test_interval_in_seconds = monitorDataObject.test_interval_in_seconds;
   let toolTipText = "";
@@ -83,7 +83,7 @@ function createCardElement(monitorDataObject) {
   //Replace null/"falsy" strings with user-friendly display values
   if (display_last_result_status === null || display_last_result_status === "" || display_last_result_status === "null") {
     display_last_result_status = "Unknown";
-  }else if (display_last_result_status === "down" && display_last_result_error !== null && display_last_result_error !== "") {
+  } else if (display_last_result_status === "down" && display_last_result_error !== null && display_last_result_error !== "") {
     display_last_result_status = "Error";
     toolTipText = display_last_result_error;
   }
@@ -163,7 +163,7 @@ function addEditButtonListener(card) {
     const titleElement = card.querySelector(".monitor-title");
     const urlElement = card.querySelector(".monitor-url");
     const testIntervalElement = card.querySelector(".monitor-test-interval");
-    
+
     titleElement.textContent = newTitle;
     urlElement.href = newURL;
     urlElement.textContent = newURL;
@@ -260,13 +260,69 @@ function removeAllMonitorCardElements() {
 
 /**
  * Rebuilds the monitor cards from the current monitor data array
+ * @param {boolean} forceCompleteRefresh - If true, all cards will be rebuilt from scratch, otherwise cards get updated
  */
-function refreshMonitorCards() {
-  removeAllMonitorCardElements();
-  for (let monitor of _monitors) {
-    const newMonitorCard = createCardElement(monitor);
-    addCardToDashboard(newMonitorCard);
+function refreshMonitorCards(forceCompleteRefresh = false) {
+  if (forceCompleteRefresh) {
+    removeAllMonitorCardElements();
+    for (let monitor of _monitors) {
+      const card = getCardByTitle(monitor.title);
+      if (card) {
+        updateCardElement(card, monitor);
+      }
+    }
+  } else {
+    //Update the existing cards
+    _monitors.forEach((monitor) => {
+      const card = getCardByTitle(monitor.title);
+      if (card) {
+        updateCardElement(card, monitor);
+      }
+    });
+
+    //Add any new cards
+    _monitors.forEach((monitor) => {
+      const card = getCardByTitle(monitor.title);
+      if (!card) {
+        const newCard = createCardElement(monitor);
+        addCardToDashboard(newCard);
+      }
+    });
+
+    //Remove any cards that no longer exist
+    const cardContainer = document.getElementById("cards-container");
+    const cards = cardContainer.getElementsByClassName("card");
+    for (let i = cards.length - 1; i >= 0; i--) {
+      const card = cards[i];
+      const title = getCardTitle(card);
+      if (!_monitors.some((monitor) => monitor.title === title)) {
+        card.remove();
+      }
+    }
   }
+}
+
+/**
+ * Refresh the visuals of a card element with the data from a monitor object
+ * @param {HTMLDivElement} card - The card element to update
+ * @param {Monitor} monitor - The monitor object to get the data from
+ */
+function updateCardElement(card, monitor) {
+  const titleElement = card.querySelector(".monitor-title");
+  const urlElement = card.querySelector(".monitor-url");
+  const statusElement = card.querySelector(".monitor-status");
+  const lastResultTimestampElement = card.querySelector(".monitor-last-result-timestamp");
+  const nextTestTimestampElement = card.querySelector(".monitor-next-test-timestamp");
+  const testIntervalElement = card.querySelector(".monitor-test-interval");
+
+  titleElement.textContent = monitor.title;
+  urlElement.href = monitor.url;
+  urlElement.textContent = monitor.url;
+  statusElement.textContent = monitor.last_result_status;
+  statusElement.setAttribute("status", monitor.last_result_status);
+  lastResultTimestampElement.textContent = `Last checked: ${formatTimestampForDisplay(monitor.last_result_timestamp)}`;
+  nextTestTimestampElement.textContent = `Next check: ${formatTimestampForDisplay(monitor.next_test_timestamp)}`;
+  testIntervalElement.textContent = `Check frenquency: ${monitor.test_interval_in_seconds}s`;
 }
 
 /**
@@ -276,7 +332,16 @@ function refreshMonitorCards() {
 function updateMonitorsArray(jsonMonitorsData) {
   const monitorsData = JSON.parse(jsonMonitorsData);
   _monitors = monitorsData.map(
-    (monitor) => new Monitor(monitor.title, monitor.url, monitor.last_result_status, monitor.last_result_error, monitor.last_result_timestamp, monitor.next_test_timestamp, monitor.test_interval_in_seconds)
+    (monitor) =>
+      new Monitor(
+        monitor.title,
+        monitor.url,
+        monitor.last_result_status,
+        monitor.last_result_error,
+        monitor.last_result_timestamp,
+        monitor.next_test_timestamp,
+        monitor.test_interval_in_seconds
+      )
   );
 }
 
@@ -324,4 +389,19 @@ function getMonitorByCard(card) {
 
 function getCardTitle(card) {
   return card.querySelector(".monitor-title").textContent;
+}
+
+getCardByTitle = (title) => {
+  const cardContainer = document.getElementById("cards-container");
+  const cards = cardContainer.getElementsByClassName("card");
+  for (let card of cards) {
+    if (card.querySelector(".monitor-title").textContent === title) {
+      return card;
+    }
+  }
+  return null;
+}
+
+formatTimestampForDisplay = (timestamp) => {
+  return timestamp.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).*/, "$1 $2");
 }
