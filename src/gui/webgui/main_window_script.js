@@ -71,11 +71,11 @@ function createCardElement(monitorDataObject) {
   let display_last_result_error = monitorDataObject.last_result_error;
   let display_last_result_timestamp = monitorDataObject.last_result_timestamp;
   if (typeof display_last_result_timestamp === "string") {
-    display_last_result_timestamp = formatTimestampForDisplay(display_last_result_timestamp)
+    display_last_result_timestamp = formatTimestampForDisplay(display_last_result_timestamp);
   }
   let display_next_test_timestamp = monitorDataObject.next_test_timestamp;
   if (typeof display_next_test_timestamp === "string") {
-    display_next_test_timestamp = formatTimestampForDisplay(display_next_test_timestamp)
+    display_next_test_timestamp = formatTimestampForDisplay(display_next_test_timestamp);
   }
   let display_test_interval_in_seconds = monitorDataObject.test_interval_in_seconds;
   let toolTipText = "";
@@ -100,14 +100,14 @@ function createCardElement(monitorDataObject) {
   newCard.innerHTML = `
       <div class="monitor-info">
         <div class="left-aligned">
-          <div class="monitor-title">${display_title}</div>
-          <a class="monitor-url" href="${display_url}" target="_blank">${display_url}</a>
+          <div class="monitor-title"></div>
+          <a class="monitor-url" href="" target="_blank"></a>
         </div>
         <div class="right-aligned">
-          <div class="monitor-status" status="${monitorDataObject.last_result_status}" title="${toolTipText}">${display_last_result_status}</div>
-          <div class="monitor-last-result-timestamp">Last checked: ${display_last_result_timestamp}</div>
-          <div class="monitor-next-test-timestamp">Next check: ${display_next_test_timestamp}</div>
-          <div class="monitor-test-interval">Check frenquency: ${display_test_interval_in_seconds}s</div>
+          <div class="monitor-status" status="" title=""></div>
+          <div class="monitor-last-result-timestamp"></div>
+          <div class="monitor-next-test-timestamp"></div>
+          <div class="monitor-test-interval"></div>
         </div>
       </div>
       <div class="buttons">
@@ -116,6 +116,8 @@ function createCardElement(monitorDataObject) {
         <button class="check-status-btn">Check Status</button>
       </div>
     `;
+
+  refreshMonitorCard(newCard, monitorDataObject);
   return newCard;
 }
 
@@ -142,16 +144,16 @@ function addEditButtonListener(card) {
   card.querySelector(".edit-btn").addEventListener("click", function () {
     // Get the card's current data
     const monitor = getMonitorByCard(card);
-    const title = monitor.title;
-    const url = monitor.url;
-    const testInterval = monitor.test_interval_in_seconds;
+    const oldTitle = monitor.title;
+    const oldUrl = monitor.url;
+    const oldTestInterval = monitor.test_interval_in_seconds;
 
     //Basic prompt to edit the card
-    const newTitle = prompt("Enter the new title", title);
+    const newTitle = prompt("Enter the new title", oldTitle);
     if (!newTitle) return; //If the user cancels the prompt, do nothing
-    const newURL = prompt("Enter the new details", url);
+    const newURL = prompt("Enter the new details", oldUrl);
     if (!newURL) return; //If the user cancels the prompt, do nothing
-    const newTestInterval = prompt("Enter the new test interval", testInterval);
+    const newTestInterval = prompt("Enter the new test interval", oldTestInterval);
     if (!newTestInterval) return; //If the user cancels the prompt, do nothing
 
     //Update the Monitor object in the array
@@ -160,16 +162,10 @@ function addEditButtonListener(card) {
     monitor.test_interval_in_seconds = newTestInterval;
 
     // Update the card with the new data
-    const titleElement = card.querySelector(".monitor-title");
-    const urlElement = card.querySelector(".monitor-url");
-    const testIntervalElement = card.querySelector(".monitor-test-interval");
-
-    titleElement.textContent = newTitle;
-    urlElement.href = newURL;
-    urlElement.textContent = newURL;
-    testIntervalElement.textContent = newTestInterval;
+    refreshMonitorCard(card, monitor);
 
     updateMonitorsDataInBackend();
+    refreshAllMonitorCards();
   });
 }
 
@@ -241,7 +237,7 @@ function receiveMonitorsDataFromBackend(jsonMonitorsData) {
   updateMonitorsArray(jsonMonitorsData);
 
   //Rebuild the visuals
-  refreshMonitorCards();
+  refreshAllMonitorCards();
 }
 
 /**
@@ -262,13 +258,13 @@ function removeAllMonitorCardElements() {
  * Rebuilds the monitor cards from the current monitor data array
  * @param {boolean} forceCompleteRefresh - If true, all cards will be rebuilt from scratch, otherwise cards get updated
  */
-function refreshMonitorCards(forceCompleteRefresh = false) {
+function refreshAllMonitorCards(forceCompleteRefresh = false) {
   if (forceCompleteRefresh) {
     removeAllMonitorCardElements();
     for (let monitor of _monitors) {
       const card = getCardByTitle(monitor.title);
       if (card) {
-        updateCardElement(card, monitor);
+        refreshMonitorCard(card, monitor);
       }
     }
   } else {
@@ -276,7 +272,7 @@ function refreshMonitorCards(forceCompleteRefresh = false) {
     _monitors.forEach((monitor) => {
       const card = getCardByTitle(monitor.title);
       if (card) {
-        updateCardElement(card, monitor);
+        refreshMonitorCard(card, monitor);
       }
     });
 
@@ -307,13 +303,14 @@ function refreshMonitorCards(forceCompleteRefresh = false) {
  * @param {HTMLDivElement} card - The card element to update
  * @param {Monitor} monitor - The monitor object to get the data from
  */
-function updateCardElement(card, monitor) {
+function refreshMonitorCard(card, monitor) {
   const titleElement = card.querySelector(".monitor-title");
   const urlElement = card.querySelector(".monitor-url");
   const statusElement = card.querySelector(".monitor-status");
   const lastResultTimestampElement = card.querySelector(".monitor-last-result-timestamp");
   const nextTestTimestampElement = card.querySelector(".monitor-next-test-timestamp");
   const testIntervalElement = card.querySelector(".monitor-test-interval");
+
 
   titleElement.textContent = monitor.title;
   urlElement.href = monitor.url;
@@ -322,7 +319,7 @@ function updateCardElement(card, monitor) {
   statusElement.setAttribute("status", monitor.last_result_status);
   lastResultTimestampElement.textContent = `Last checked: ${formatTimestampForDisplay(monitor.last_result_timestamp)}`;
   nextTestTimestampElement.textContent = `Next check: ${formatTimestampForDisplay(monitor.next_test_timestamp)}`;
-  testIntervalElement.textContent = `Check frenquency: ${monitor.test_interval_in_seconds}s`;
+  testIntervalElement.textContent = `Check interval: ${monitor.test_interval_in_seconds}s`;
 }
 
 /**
@@ -400,8 +397,8 @@ getCardByTitle = (title) => {
     }
   }
   return null;
-}
+};
 
 formatTimestampForDisplay = (timestamp) => {
   return timestamp.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).*/, "$1 $2");
-}
+};

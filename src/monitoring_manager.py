@@ -95,7 +95,7 @@ def start_monitoring() -> None:
     global _monitoring_task
     if _monitoring_task is not None:
         _monitoring_task.stop()
-    _monitoring_task = start_task(execute_all_due_tests, 2)
+    _monitoring_task = start_task(execute_all_due_tests, 1)
 
 
 def stop_monitoring() -> None:
