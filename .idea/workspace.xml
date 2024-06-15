@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="99e456e7-c32a-4532-80cd-a3182c2d2607" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/main_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitors_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/monitors_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gui/webgui/main_window_script.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/webgui/main_window_script.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/monitor_object.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitor_object.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/monitoring_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitoring_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/monitoring_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monitoring_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,11 +158,6 @@
           <url>file://$PROJECT_DIR$/src/gui/main_window.py</url>
           <line>40</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/monitoring_manager.py</url>
-          <line>78</line>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

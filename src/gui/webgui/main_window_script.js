@@ -65,22 +65,28 @@ function addCardToDashboard(card) {
  * @returns {HTMLDivElement} A new card element for a monitor
  */
 function createCardElement(monitorDataObject) {
-  let title = monitorDataObject.title;
-  let url = monitorDataObject.url;
-  let last_result_status = monitorDataObject.last_result_status;
-  let last_result_timestamp = monitorDataObject.last_result_timestamp;
-  let next_test_timestamp = monitorDataObject.next_test_timestamp;
-  let test_interval_in_seconds = monitorDataObject.test_interval_in_seconds;
+  let display_title = monitorDataObject.title;
+  let display_url = monitorDataObject.url;
+  let display_last_result_status = monitorDataObject.last_result_status;
+  let display_last_result_error = monitorDataObject.last_result_error;
+  let display_last_result_timestamp = monitorDataObject.last_result_timestamp;
+  let display_next_test_timestamp = monitorDataObject.next_test_timestamp;
+  let display_test_interval_in_seconds = monitorDataObject.test_interval_in_seconds;
+  let toolTipText = "";
 
   //Replace null/"falsy" strings with user-friendly display values
-  if (last_result_status === null || last_result_status === "" || last_result_status === "null") {
-    last_result_status = "Status unknown";
+  if (display_last_result_status === null || display_last_result_status === "" || display_last_result_status === "null") {
+    display_last_result_status = "Unknown";
+  }else if (display_last_result_status === "down" && display_last_result_error !== null && display_last_result_error !== "") {
+    display_last_result_status = "Error";
+    toolTipText = display_last_result_error;
   }
-  if (last_result_timestamp === null || last_result_timestamp === "" || last_result_timestamp === "null") {
-    last_result_timestamp = "Never tested";
+
+  if (display_last_result_timestamp === null || display_last_result_timestamp === "" || display_last_result_timestamp === "null") {
+    display_last_result_timestamp = "Never tested";
   }
-  if (next_test_timestamp === null || next_test_timestamp === "" || next_test_timestamp === "null") {
-    next_test_timestamp = "No upcoming test scheduled";
+  if (display_next_test_timestamp === null || display_next_test_timestamp === "" || display_next_test_timestamp === "null") {
+    display_next_test_timestamp = "No upcoming test scheduled";
   }
 
   const newCard = document.createElement("div");
@@ -88,14 +94,14 @@ function createCardElement(monitorDataObject) {
   newCard.innerHTML = `
       <div class="monitor-info">
         <div class="left-aligned">
-          <div class="monitor-title">${title}</div>
-          <a class="monitor-url" href="${url}" target="_blank">${url}</a>
+          <div class="monitor-title">${display_title}</div>
+          <a class="monitor-url" href="${display_url}" target="_blank">${display_url}</a>
         </div>
         <div class="right-aligned">
-          <div class="monitor-status" status="${last_result_status}">${last_result_status}</div>
-          <div class="monitor-last-result-timestamp">${last_result_timestamp}</div>
-          <div class="monitor-next-test-timestamp">${next_test_timestamp}</div>
-          <div class="monitor-test-interval">${test_interval_in_seconds}</div>
+          <div class="monitor-status" status="${monitorDataObject.last_result_status}" title="${toolTipText}">${display_last_result_status}</div>
+          <div class="monitor-last-result-timestamp">Last checked: ${display_last_result_timestamp}</div>
+          <div class="monitor-next-test-timestamp">Next check: ${display_next_test_timestamp}</div>
+          <div class="monitor-test-interval">Check frenquency: ${display_test_interval_in_seconds}s</div>
         </div>
       </div>
       <div class="buttons">
@@ -129,29 +135,33 @@ function addDeleteButtonListener(card) {
 function addEditButtonListener(card) {
   card.querySelector(".edit-btn").addEventListener("click", function () {
     // Get the card's current data
-    const title = card.querySelector(".monitor-title");
-    const url = card.querySelector(".monitor-url");
-    const testInterval = card.querySelector(".monitor-test-interval");
+    const monitor = getMonitorByCard(card);
+    const title = monitor.title;
+    const url = monitor.url;
+    const testInterval = monitor.test_interval_in_seconds;
 
     //Basic prompt to edit the card
-    const newTitle = prompt("Enter the new title", title.textContent);
+    const newTitle = prompt("Enter the new title", title);
     if (!newTitle) return; //If the user cancels the prompt, do nothing
-    const newURL = prompt("Enter the new details", url.textContent);
+    const newURL = prompt("Enter the new details", url);
     if (!newURL) return; //If the user cancels the prompt, do nothing
-    const newTestInterval = prompt("Enter the new test interval", testInterval.textContent);
+    const newTestInterval = prompt("Enter the new test interval", testInterval);
     if (!newTestInterval) return; //If the user cancels the prompt, do nothing
 
     //Update the Monitor object in the array
-    const monitor = getMonitorByTitle(title.textContent);
     monitor.title = newTitle;
     monitor.url = newURL;
     monitor.test_interval_in_seconds = newTestInterval;
 
     // Update the card with the new data
-    title.textContent = newTitle;
-    url.href = newURL;
-    url.textContent = newURL;
-    testInterval.textContent = newTestInterval;
+    const titleElement = card.querySelector(".monitor-title");
+    const urlElement = card.querySelector(".monitor-url");
+    const testIntervalElement = card.querySelector(".monitor-test-interval");
+    
+    titleElement.textContent = newTitle;
+    urlElement.href = newURL;
+    urlElement.textContent = newURL;
+    testIntervalElement.textContent = newTestInterval;
 
     updateMonitorsDataInBackend();
   });
@@ -260,7 +270,7 @@ function refreshMonitorCards() {
 function updateMonitorsArray(jsonMonitorsData) {
   const monitorsData = JSON.parse(jsonMonitorsData);
   _monitors = monitorsData.map(
-    (monitor) => new Monitor(monitor.title, monitor.url, monitor.last_result_status, monitor.last_result_timestamp, monitor.next_test_timestamp, monitor.test_interval_in_seconds)
+    (monitor) => new Monitor(monitor.title, monitor.url, monitor.last_result_status, monitor.last_result_error, monitor.last_result_timestamp, monitor.next_test_timestamp, monitor.test_interval_in_seconds)
   );
 }
 
@@ -273,14 +283,16 @@ class Monitor {
    * @param {string} title - The title of the monitor
    * @param {string} url - The URL of the monitor
    * @param {string} last_result_status - The last result status of the monitor
+   * @param {string} last_result_error - The last result error of the monitor
    * @param {string} last_result_timestamp - The last result timestamp of the monitor
    * @param {string} next_test_timestamp - The next test timestamp of the monitor
    * @param {string} test_interval_in_seconds - The test interval in seconds of the monitor
    */
-  constructor(title, url, last_result_status, last_result_timestamp, next_test_timestamp, test_interval_in_seconds) {
+  constructor(title, url, last_result_status, last_result_error, last_result_timestamp, next_test_timestamp, test_interval_in_seconds) {
     this.title = title;
     this.url = url;
     this.last_result_status = last_result_status;
+    this.last_result_error = last_result_error;
     this.last_result_timestamp = last_result_timestamp;
     this.next_test_timestamp = next_test_timestamp;
     this.test_interval_in_seconds = test_interval_in_seconds;

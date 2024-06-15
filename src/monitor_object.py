@@ -16,7 +16,16 @@ class MonitorObject:
     next_test_timestamp: str  # The monitor will run its test if the current time is greater than this
     test_interval_in_seconds: int  # The interval to be added to the next_test_datetime after each test
 
-    def __init__(self, title: str, url: str, test_interval_in_seconds: int, last_result_status: str | None = None, last_result_timestamp: str | None = None, next_test_timestamp: str | None = None):
+    def __init__(
+        self,
+        title: str,
+        url: str,
+        test_interval_in_seconds: int,
+        last_result_status: str | None = None,
+        last_result_error: str | None = None,
+        last_result_timestamp: str | None = None,
+        next_test_timestamp: str | None = None,
+    ):
         self.title = title
         self.url = url
         self.last_result_status = last_result_status
@@ -45,4 +54,4 @@ class MonitorObject:
         self.last_result_status = "up" if result.exists else "down"
         self.last_result_error = result.error
         self.last_result_timestamp = datetime.datetime.now().isoformat()
-        self.next_test_timestamp = (datetime.datetime.now() + datetime.timedelta(seconds=self.test_interval_in_seconds)).isoformat()
+        self.next_test_timestamp = (datetime.datetime.now() + datetime.timedelta(seconds=int(self.test_interval_in_seconds))).isoformat()
