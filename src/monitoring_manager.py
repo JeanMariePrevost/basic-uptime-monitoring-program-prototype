@@ -5,8 +5,10 @@ It also provides methods to save and load the monitors to and from a file.
 
 import json
 from typing import List
+from blinker import signal
 
 from monitor_object import MonitorObject
+from scheduler import BackgroundTask, start_task
 
 
 def get_monitor_list_json() -> str:
@@ -81,3 +83,39 @@ def convert_monitors_list_to_json(monitor_data_list: List[MonitorObject]) -> str
 
 
 _monitors: List[MonitorObject] = read_monitors_list_from_file()
+_monitoring_task: BackgroundTask | None = None
+tests_executed_signal = signal("tests-executed")  # Signal to be emitted when tests are executed, so we can expect changes in the data
+
+
+def start_monitoring() -> None:
+    """
+    Starts the monitoring task that will go through all monitors to execute their tests if they are due
+    """
+    print("Monitoring started")
+    global _monitoring_task
+    if _monitoring_task is not None:
+        _monitoring_task.stop()
+    _monitoring_task = start_task(execute_all_due_tests, 2)
+
+
+def stop_monitoring() -> None:
+    print("Monitoring stopped")
+    global _monitoring_task
+    _monitoring_task.stop()
+
+
+def execute_all_due_tests() -> None:
+    """
+    The function passed to the BackgroundTask that will execute all tests that are due
+    """
+    any_test_executed = False
+    for monitor in _monitors:
+        test_ran = monitor.execute_test_if_due()
+        if test_ran:
+            any_test_executed = True
+
+    if any_test_executed:
+        save_monitors_to_file()
+        tests_executed_signal.send()
+    else:
+        print("No tests were due")

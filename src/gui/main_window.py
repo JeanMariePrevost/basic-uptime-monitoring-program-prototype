@@ -51,6 +51,11 @@ def sendMonitorsDataToFrontend():
     _window.evaluate_js(f'receiveMonitorsDataFromBackend("{monitor_data_json}")')
 
 
+def monitors_tests_ran(_sender) -> None:
+    print(f"Monitors tests were due and were executed")
+    sendMonitorsDataToFrontend()
+
+
 def start():
     print("main_window GUI starting...")
 
@@ -62,6 +67,8 @@ def start():
     # Create a function that will be called when the window is loaded
     def on_loaded():
         sendMonitorsDataToFrontend()
+
+    monitoring_manager.tests_executed_signal.connect(monitors_tests_ran)
 
     # Start the webview, showing the window
     webview.start(on_loaded, debug=True)  # debug=True opens the inspector

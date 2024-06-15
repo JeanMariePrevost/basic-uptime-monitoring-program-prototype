@@ -38,15 +38,20 @@ class MonitorObject:
     def __repr__(self):
         return f"MonitorObject(title={self.title}, url={self.url}, last_result_status={self.last_result_status}, last_result_timestamp={self.last_result_timestamp}, next_test_timestamp={self.next_test_timestamp}, test_interval_in_seconds={self.test_interval_in_seconds})"
 
-    def execute_test_if_due(self) -> None:
+    def execute_test_if_due(self) -> bool:
         """
         Executes the test IF the current time is greater than the next test timestamp
+        :return: True if the test was executed, False if it was skipped
         """
+        test_was_executed = False
         if datetime.datetime.now() >= datetime.datetime.fromisoformat(self.next_test_timestamp):
             print(f"Test was due for monitor {self.title}. Executing...")
             self.execute_test()
+            test_was_executed = True
         else:
             print(f"Test was not due for monitor {self.title}. Skipping...")
+
+        return test_was_executed
 
     def execute_test(self) -> None:
         result = check_url_through_urllib(self.url)

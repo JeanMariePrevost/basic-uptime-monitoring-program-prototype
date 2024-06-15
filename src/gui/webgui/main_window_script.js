@@ -69,8 +69,8 @@ function createCardElement(monitorDataObject) {
   let display_url = monitorDataObject.url;
   let display_last_result_status = monitorDataObject.last_result_status;
   let display_last_result_error = monitorDataObject.last_result_error;
-  let display_last_result_timestamp = monitorDataObject.last_result_timestamp;
-  let display_next_test_timestamp = monitorDataObject.next_test_timestamp;
+  let display_last_result_timestamp = monitorDataObject.last_result_timestamp.slice(0, 19);
+  let display_next_test_timestamp = monitorDataObject.next_test_timestamp.slice(0, 19);
   let display_test_interval_in_seconds = monitorDataObject.test_interval_in_seconds;
   let toolTipText = "";
 
