@@ -17,6 +17,7 @@ def save_monitors_to_file() -> None:
     with open("monitors_data.json", "w") as file:
         json_data = convert_monitors_list_to_json(_monitors)
         file.write(json_data)
+        print("Saved monitors to file")
 
 
 def update_monitors_list_from_loca_json_file() -> None:
@@ -53,6 +54,7 @@ def update_monitors_from_json(monitor_data_json: str) -> None:
     Rebuilds the monitors list with the data from the JSON string
     """
     global _monitors
+    print("updated backend model with new data from frontend")
     _monitors = convert_monitors_json_to_list(monitor_data_json)
     save_monitors_to_file()
 

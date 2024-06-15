@@ -2,7 +2,7 @@ let _monitors = []; //Array of Monitor data objects
 
 document.addEventListener("DOMContentLoaded", (event) => {
   document.getElementById("add-card-btn").addEventListener("click", onAddMonitorClicked);
-  document.getElementById("apply-btn").addEventListener("click", updateMonitorsDataInBackend);
+  // document.getElementById("apply-btn").addEventListener("click", updateMonitorsDataInBackend);
 });
 
 /**
@@ -40,7 +40,6 @@ function updateMonitorsDataInBackend() {
   const monitorData = JSON.stringify(_monitors);
   pywebview.api.send_monitors_data_to_backend(monitorData);
 }
-
 
 /**
  * Adds a card existing card element to the dashboard
@@ -134,22 +133,25 @@ function addEditButtonListener(card) {
 
     //Basic prompt to edit the card
     const newTitle = prompt("Enter the new title", title.textContent);
+    if (!newTitle) return; //If the user cancels the prompt, do nothing
     const newURL = prompt("Enter the new details", url.textContent);
+    if (!newURL) return; //If the user cancels the prompt, do nothing
     const newTestInterval = prompt("Enter the new test interval", testInterval.textContent);
+    if (!newTestInterval) return; //If the user cancels the prompt, do nothing
 
     //Update the Monitor object in the array
     const monitor = getMonitorByTitle(title.textContent);
     monitor.title = newTitle;
     monitor.url = newURL;
     monitor.test_interval_in_seconds = newTestInterval;
-    
+
     // Update the card with the new data
-    if (newTitle && newURL && newTestInterval) {
-      title.textContent = newTitle;
-      url.href = newURL;
-      url.textContent = newURL;
-      testInterval.textContent = newTestInterval;
-    }
+    title.textContent = newTitle;
+    url.href = newURL;
+    url.textContent = newURL;
+    testInterval.textContent = newTestInterval;
+
+    updateMonitorsDataInBackend();
   });
 }
 
@@ -166,7 +168,15 @@ function animateAndRemoveCard(card) {
 
   card.addEventListener("animationend", () => {
     console.log("Card removal animation ended");
+    // Remove the Monitor object from the _monitors array
+    const monitor = getMonitorByCard(card);
+    const index = _monitors.indexOf(monitor);
+    if (index > -1) {
+      _monitors.splice(index, 1);
+    }
+    //Remove the card element from the DOM
     card.remove();
+
     updateMonitorsDataInBackend(); //Apply the changes to the backend immediately
     showOrHideNoMonitorsCard();
   });
@@ -270,4 +280,17 @@ class Monitor {
  */
 function getMonitorByTitle(title) {
   return _monitors.find((monitor) => monitor.title === title);
+}
+
+/**
+ * Get the Monitor object from the array of monitors by its card element
+ * @param {HTMLDivElement} card - The card element of the monitor
+ * @returns {Monitor} The Monitor object
+ */
+function getMonitorByCard(card) {
+  return getMonitorByTitle(getCardTitle(card));
+}
+
+function getCardTitle(card) {
+  return card.querySelector(".monitor-title").textContent;
 }
