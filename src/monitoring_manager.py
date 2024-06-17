@@ -4,6 +4,7 @@ It also provides methods to save and load the monitors to and from a file.
 """
 
 import json
+import os
 from typing import List
 from blinker import signal
 
@@ -37,10 +38,24 @@ def update_monitors_list_from_loca_json_file() -> None:
 
 
 def read_monitors_json_from_file() -> str:
-    with open("monitors_data.json", "r") as file:
-        file_content = file.read()
-        general_logger.debug(f"read_monitors_json_from_file: {file_content}")
-        return file_content
+    # Create an empty monitors_data.json file if it doesn't exist
+    if not os.path.exists("monitors_data.json"):
+        with open("monitors_data.json", "w") as file:
+            file.write("[]")
+            general_logger.warning('Monitor config "monitors_data.json" not found. Created an empty file.')
+            return ""
+    else:
+        try:
+            with open("monitors_data.json", "r") as file:
+                file_content = file.read()
+                general_logger.debug(f"read_monitors_json_from_file: {file_content}")
+                return file_content
+        except FileNotFoundError:
+            general_logger.error("monitors_data.json could not be found.")
+            return ""
+        except Exception as e:
+            general_logger.error(f"An error occurred while reading monitors_data.json: {e}")
+            return ""
 
 
 def read_monitors_list_from_file() -> List[MonitorObject]:
@@ -74,7 +89,15 @@ def update_monitors_from_json(monitor_data_json: str) -> None:
 
 
 def convert_monitors_json_to_list(monitor_data_json: str) -> List[MonitorObject]:
-    monitor_dicts = json.loads(monitor_data_json)
+    if monitor_data_json == "":
+        general_logger.info("Monitor config data is empty.")
+        return []
+    else:
+        try:
+            monitor_dicts = json.loads(monitor_data_json)
+        except json.JSONDecodeError:
+            general_logger.error("Error parsing monitor config JSON. Returning an empty list.")
+            monitor_dicts = []
 
     # Convert test_interval_in_seconds to integer
     for monitor in monitor_dicts:

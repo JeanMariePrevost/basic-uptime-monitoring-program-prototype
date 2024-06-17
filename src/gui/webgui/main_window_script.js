@@ -400,5 +400,11 @@ getCardByTitle = (title) => {
 };
 
 formatTimestampForDisplay = (timestamp) => {
-  return timestamp.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).*/, "$1 $2");
+
+  try {
+    formattedTimestamp = timestamp.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).*/, "$1 $2");
+  }catch(e){
+    formattedTimestamp = timestamp;
+  }
+  return formattedTimestamp;
 };

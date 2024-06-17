@@ -4,18 +4,25 @@ THis module uses pystray to create a system tray icon and allow the program to k
 
 import PIL.Image
 import pystray
+from sys import exit
 
+import main
 import queue_manager
 from gui import main_window
 from my_logger import general_logger
+
+_icon: pystray.Icon
 
 
 # Define actions for the RMB menu of the tray icon
 def on_clicked_exit(icon, item):
     general_logger.debug(f'system_tray.on_clicked_exit: Clicked "{item}"')
-    icon.stop()
-    main_window.close()
-    queue_manager.enqueue_task(lambda: exit(0))
+    main.exit_application()
+
+
+def stop():
+    general_logger.debug("system_tray.stop: Stopping system tray...")
+    _icon.stop()
 
 
 # Define actions for the RMB menu of the tray icon
@@ -27,10 +34,11 @@ def on_clicked_open_gui(icon, item):
 def initialize_system_tray() -> None:
     general_logger.debug("system_tray.initialize_system_tray: Initializing system tray...")
     # Load the image for the icon
-    image = PIL.Image.open("icon_32px.png")
+    image = PIL.Image.open(main.resource_path("icon_32px.png"))
 
     # Set up pystray
-    icon = pystray.Icon(
+    global _icon
+    _icon = pystray.Icon(
         "Bump - Web Monitoring Tool",
         image,
         menu=pystray.Menu(
@@ -40,4 +48,4 @@ def initialize_system_tray() -> None:
     )
 
     # Run pystray
-    icon.run_detached()
+    _icon.run_detached()
