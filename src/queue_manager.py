@@ -6,6 +6,8 @@ This module contains the queue manager for the background thread to communicate 
 import queue
 import time
 
+from my_logger import general_logger
+
 _main_thread_queue = queue.Queue()
 
 
@@ -18,11 +20,11 @@ def main_loop():
     while True:
         try:
             task = _main_thread_queue.get_nowait()
+            general_logger.debug(f"Dequeued task: {task.__name__} ({task})")
             task()
         except queue.Empty:
             pass
         time.sleep(0.1)
-        print("DEBUG - Main loop running...")
 
 
 def enqueue_task(task):
@@ -30,4 +32,5 @@ def enqueue_task(task):
     Enqueues a task to be executed in the main thread.
     :param task: The task to execute
     """
+    general_logger.debug(f"Enqueuing task: {task.__name__} ({task})")
     _main_thread_queue.put(task)

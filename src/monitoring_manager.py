@@ -8,6 +8,7 @@ from typing import List
 from blinker import signal
 
 from monitor_object import MonitorObject
+from my_logger import general_logger
 from scheduler import BackgroundTask, start_task
 
 
@@ -19,10 +20,10 @@ def save_monitors_to_file() -> None:
     with open("monitors_data.json", "w") as file:
         json_data = convert_monitors_list_to_json(_monitors)
         file.write(json_data)
-        print("Saved monitors to file")
+        general_logger.debug(f"Monitors saved to monitors_data.json")
 
 
-def get_monitor_by_title(title: str) -> MonitorObject:
+def get_monitor_by_title(title: str) -> MonitorObject | None:
     # HACK - We're using the monitor's title as its "unique" id in the prototype, terrible idea but eh
     for monitor in _monitors:
         if monitor.title == title:
@@ -37,7 +38,9 @@ def update_monitors_list_from_loca_json_file() -> None:
 
 def read_monitors_json_from_file() -> str:
     with open("monitors_data.json", "r") as file:
-        return file.read()
+        file_content = file.read()
+        general_logger.debug(f"read_monitors_json_from_file: {file_content}")
+        return file_content
 
 
 def read_monitors_list_from_file() -> List[MonitorObject]:
@@ -52,6 +55,7 @@ def append_monitor(monitor: MonitorObject) -> None:
 def create_and_append_monitor(title: str, url: str, test_interval_in_seconds: int) -> MonitorObject:
     new_monitor = MonitorObject(title, url, test_interval_in_seconds)
     append_monitor(new_monitor)
+    return new_monitor
 
 
 def remove_monitor(monitor: MonitorObject) -> None:
@@ -64,17 +68,23 @@ def update_monitors_from_json(monitor_data_json: str) -> None:
     Rebuilds the monitors list with the data from the JSON string
     """
     global _monitors
-    print("updated backend model with new data from frontend")
     _monitors = convert_monitors_json_to_list(monitor_data_json)
+    general_logger.debug(f"update_monitors_from_json: {_monitors}")
     save_monitors_to_file()
 
 
 def convert_monitors_json_to_list(monitor_data_json: str) -> List[MonitorObject]:
     monitor_dicts = json.loads(monitor_data_json)
+
     # Convert test_interval_in_seconds to integer
     for monitor in monitor_dicts:
         monitor["test_interval_in_seconds"] = int(monitor["test_interval_in_seconds"])
-    return [MonitorObject(**monitor_dict) for monitor_dict in monitor_dicts]
+
+    monitors_list = [MonitorObject(**monitor_dict) for monitor_dict in monitor_dicts]
+
+    general_logger.debug(f"convert_monitors_json_to_list: {monitors_list} monitors parsed from JSON")
+
+    return monitors_list
 
 
 def convert_monitors_list_to_json(monitor_data_list: List[MonitorObject]) -> str:
@@ -82,24 +92,25 @@ def convert_monitors_list_to_json(monitor_data_list: List[MonitorObject]) -> str
     return json.dumps(monitor_dicts)
 
 
-_monitors: List[MonitorObject] = read_monitors_list_from_file()
-_monitoring_task: BackgroundTask | None = None
-tests_executed_signal = signal("tests-executed")  # Signal to be emitted when tests are executed, so we can expect changes in the data
+_monitors: List[MonitorObject] = read_monitors_list_from_file()  # The list of monitors
+_monitoring_task: BackgroundTask | None = None  # The task that will run in the background to monitor the monitors
+tests_executed_signal = signal("tests-executed")  # Signal to be emitted when tests are executed, used to signal changes to the GUI
 
 
 def start_monitoring() -> None:
     """
     Starts the monitoring task that will go through all monitors to execute their tests if they are due
     """
-    print("Monitoring started")
+    general_logger.info("Monitoring started.")
     global _monitoring_task
     if _monitoring_task is not None:
+        general_logger.debug("Another monitoring task exists, it will be stopped before starting a new one.")
         _monitoring_task.stop()
     _monitoring_task = start_task(execute_all_due_tests, 1)
 
 
 def stop_monitoring() -> None:
-    print("Monitoring stopped")
+    general_logger.info("Monitoring stopped")
     global _monitoring_task
     _monitoring_task.stop()
 
@@ -118,4 +129,5 @@ def execute_all_due_tests() -> None:
         save_monitors_to_file()
         tests_executed_signal.send()
     else:
-        print("No tests were due")
+        # print("No tests were due")
+        pass

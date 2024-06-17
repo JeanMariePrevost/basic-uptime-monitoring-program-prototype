@@ -4,6 +4,7 @@ import webview
 
 import monitoring_manager
 from gui import new_monitor_dialog
+from my_logger import general_logger
 from util import escape_json_for_javascript
 
 
@@ -47,17 +48,16 @@ _window: webview.Window | None = None
 
 def sendMonitorsDataToFrontend():
     monitor_data_json = escape_json_for_javascript(monitoring_manager.get_monitor_list_json())
-    print(f"Sending this to the frontend: {monitor_data_json}")
+    general_logger.debug(f"Sending this to the frontend: {monitor_data_json}")
     _window.evaluate_js(f'receiveMonitorsDataFromBackend("{monitor_data_json}")')
 
 
 def monitors_tests_ran(_sender) -> None:
-    print(f"Monitors tests were due and were executed")
     sendMonitorsDataToFrontend()
 
 
 def start(_sender=None):
-    print("main_window GUI starting...")
+    general_logger.debug("main_window GUI starting...")
 
     # Set up pywebview
     api = Api()

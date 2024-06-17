@@ -1,11 +1,14 @@
 import datetime
 
+from my_logger import general_logger, monitor_logger
 from monitoring_functions import check_url_through_urllib
 
 
 class MonitorObject:
     """
-    A class to represent a single monitor, running periodic tests for a url
+    Represents a monitor object that will be used to check the status of a URL.
+
+    Is also the class that will be used to store the monitor objects in the monitors_list and serialized into json.
     """
 
     title: str
@@ -34,6 +37,7 @@ class MonitorObject:
         self.test_interval_in_seconds = test_interval_in_seconds
         if self.next_test_timestamp is None:
             self.next_test_timestamp = datetime.datetime.now().isoformat()
+        general_logger.info(f"MonitorObject created with title={title}, url={url}, test_interval_in_seconds={test_interval_in_seconds}")
 
     def __repr__(self):
         return f"MonitorObject(title={self.title}, url={self.url}, last_result_status={self.last_result_status}, last_result_timestamp={self.last_result_timestamp}, next_test_timestamp={self.next_test_timestamp}, test_interval_in_seconds={self.test_interval_in_seconds})"
@@ -45,17 +49,30 @@ class MonitorObject:
         """
         test_was_executed = False
         if datetime.datetime.now() >= datetime.datetime.fromisoformat(self.next_test_timestamp):
-            print(f"Test was due for monitor {self.title}. Executing...")
             self.execute_test()
             test_was_executed = True
         else:
-            print(f"Test was not due for monitor {self.title}. Skipping...")
+            # print(f"Test was not due for monitor {self.title}. Skipping...")
+            pass
 
         return test_was_executed
 
     def execute_test(self) -> None:
+        """
+        Executes the test for the monitor
+        """
+        general_logger.debug(f"Executing test for monitor [{self.title}] with url={self.url}")
         result = check_url_through_urllib(self.url)
-        print(f"Test result for monitor {self.title}: {result}")
+        general_logger.debug(f"Test result for monitor [{self.title}]: {result}")
+        if result.error is not None:
+            general_logger.debug(f"Monitor [{self.title}] test failed with error: {result.error}")
+            monitor_logger.warning(f"Monitor [{self.title}] test failed with error: {result.error}")
+        elif self.last_result_status == "up" and not result.exists:
+            general_logger.debug(f"Monitor [{self.title}] has changed status from up to down")
+            monitor_logger.warning(f"Monitor [{self.title}] has changed status from up to down. Error: {result.error}")
+        elif self.last_result_status == "down" and result.exists:
+            general_logger.info(f"Monitor [{self.title}] has changed status from down to up")
+            monitor_logger.warning(f"Monitor [{self.title}] has changed status from down to up. Error: {result.error}")
         self.last_result_status = "up" if result.exists else "down"
         self.last_result_error = result.error
         self.last_result_timestamp = datetime.datetime.now().isoformat()

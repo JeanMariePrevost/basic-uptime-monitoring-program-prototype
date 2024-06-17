@@ -5,6 +5,8 @@ Utility module for running tasks in the background at regular intervals.
 import threading
 import time
 
+from my_logger import general_logger
+
 tasks = []
 
 
@@ -42,13 +44,10 @@ def start_task(function_to_call, interval_in_seconds) -> BackgroundTask:
     """
     task = BackgroundTask(function_to_call, interval_in_seconds)
     tasks.append(task)
+    general_logger.debug(f"scheduler.start_task: Task created for function {function_to_call} with interval {interval_in_seconds} seconds. Total tasks: {len(tasks)}")
     return task
 
 
 def stop_task(task):
     task.stop()
     tasks.remove(task)
-
-
-def update_task_interval(task, new_interval):
-    task.update_interval(new_interval)

@@ -9,6 +9,7 @@ import urllib.error
 import urllib.request
 from typing import Optional
 
+from my_logger import general_logger
 from url_test_result import URLTestResult
 
 
@@ -16,7 +17,7 @@ def check_url_through_urllib(url: str) -> URLTestResult:
     """
     Basic test that checks the status of a URL and returns the result.
     """
-    print(f'Running a basic test on url "{url}"')
+    general_logger.debug(f'Running check_url_through_urllib for url "{url}"')
     start_time = time.time()
     timestamp: str = time.ctime()
     latency: Optional[float] = None
@@ -42,4 +43,6 @@ def check_url_through_urllib(url: str) -> URLTestResult:
         latency = time.time() - start_time
         error: Optional[str] = f"URL Error: {e}"
     finally:
-        return URLTestResult(url, exists, status_code, latency, error, timestamp)
+        result = URLTestResult(url, exists, status_code, latency, error, timestamp)
+        general_logger.debug(f"check_url_through_urllib result: {result}")
+        return result

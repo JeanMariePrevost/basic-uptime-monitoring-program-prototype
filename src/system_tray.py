@@ -7,26 +7,25 @@ import pystray
 
 import queue_manager
 from gui import main_window
+from my_logger import general_logger
 
 
 # Define actions for the RMB menu of the tray icon
 def on_clicked_exit(icon, item):
-    print(f'Clicked "{item}"')
-    print("Going to stop pystray now...")
-    print("Going to exit now...")
+    general_logger.debug(f'system_tray.on_clicked_exit: Clicked "{item}"')
     icon.stop()
     main_window.close()
     queue_manager.enqueue_task(lambda: exit(0))
-    # TODO - Implement a single exit function somewhere, exiting everything (e.g. closing all GUI windows, stopping pystray...)
 
 
 # Define actions for the RMB menu of the tray icon
 def on_clicked_open_gui(icon, item):
-    print(f'Clicked "{item}"')
+    general_logger.debug(f'system_tray.on_clicked_open_gui: Clicked "{item}"')
     queue_manager.enqueue_task(main_window.start)
 
 
 def initialize_system_tray() -> None:
+    general_logger.debug("system_tray.initialize_system_tray: Initializing system tray...")
     # Load the image for the icon
     image = PIL.Image.open("icon_32px.png")
 
