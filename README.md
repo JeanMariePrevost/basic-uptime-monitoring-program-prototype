@@ -1,4 +1,4 @@
-### README for BUMP PROTOTYPE, th Basic Uptime Monitoring Program
+### README for BUMP PROTOTYPE, the Basic Uptime Monitoring Program
 
 ---
 
